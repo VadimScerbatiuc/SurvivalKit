@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row" >
+    {% for prod in products %}
+         <div class="col-sm-6 col-lg-3">
+            <div class="card">
+                <div class="card-body">
+                    <a class="card-link link-text">
+                        <img class="card-img-top" {% if prod.main_image %} src="{{ prod.main_image.image.url }}" {% endif %} alt="Card image cap">
+                        <h5 class="card-title text-link">{{ prod.name }}</h5>
+                    </a>
+                    <p class="card-text description-text-color"><b>Description: </b>{{ prod.description }}<br> <b>Category: </b>{{ prod.category }}</p>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <p class="fs-5">
+                                {% if prod.product_price %}
+                                    {{ prod.product_price.price }}
+                                    {{ prod.product_price.currency_symbol }}
+                                {% endif %}
+                        </p>
+                        <a href="#" class="btn btn-primary" ><i class="fa-solid fa-cart-shopping"></i>  Add to cart</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock%}

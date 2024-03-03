@@ -3,10 +3,25 @@
 {% block content %}
 
 <div>
-    <form method="post">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit">Sign In</button>
+    <form action="." method="post">
+        {% csrf_token %}
+        <div class="form-outline mb-4">
+            <div class="mb-3">
+                <label for="id_username" class="form-label">Email</label>
+                <input type="text" name="username" id="id_username" required class="form-control">
+                {% for error in form.name.errors %}
+                <p style="color: red">{{ error }}</p>
+                {% endfor %}
+            </div>
+            <div class="mb-3">
+                <label for="id_password" class="form-label">Password</label>
+                <input type="password" name="password" id="id_password" required class="form-control">
+                {% for error in form.password.errors %}
+                <p style="color: red">{{ error }}</p>
+                {% endfor %}
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Sign In</button>
     </form>
 </div>
 
