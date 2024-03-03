@@ -147,6 +147,7 @@ node_modules
 /dist
 
 media
+images/
 
 # local env files
 .env.local

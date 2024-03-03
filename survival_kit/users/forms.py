@@ -6,7 +6,7 @@ from users.models import UserAccount
 
 
 class SignUpForm(UserCreationForm):
-    email = forms.EmailField(label='Email', )
+    email = forms.EmailField(label='Email')
     first_name = forms.CharField(label='Firs Name')
     last_name = forms.CharField(label='Last Name')
     password1 = forms.CharField(label='Password')
