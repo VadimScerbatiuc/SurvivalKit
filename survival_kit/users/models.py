@@ -1,4 +1,5 @@
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import (AbstractBaseUser,
+                                        BaseUserManager, PermissionsMixin)
 from django.db import models
 
 
@@ -24,8 +25,18 @@ class UserManager(BaseUserManager):
 
 class UserAccount(PermissionsMixin, AbstractBaseUser):
     email = models.EmailField(verbose_name="Email", max_length=128, unique=True)
-    first_name = models.CharField(verbose_name="First name", max_length=40, blank=True, null=True)
-    last_name = models.CharField(verbose_name="Last name", max_length=40, blank=True, null=True)
+    first_name = models.CharField(
+        verbose_name="First name",
+        max_length=40,
+        blank=True,
+        null=True
+    )
+    last_name = models.CharField(
+        verbose_name="Last name",
+        max_length=40,
+        blank=True,
+        null=True
+    )
     is_staff = models.BooleanField(default=False,)
 
     objects = UserManager()
