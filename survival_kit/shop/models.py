@@ -13,7 +13,12 @@ class BaseModel(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=200, db_index=True,)
-    slug = AutoSlugField(populate_from='name', max_length=200, db_index=True, unique=True)
+    slug = AutoSlugField(
+        populate_from='name',
+        max_length=200,
+        db_index=True,
+        unique=True
+    )
 
     class Meta:
         ordering = ['name']
@@ -25,7 +30,12 @@ class Category(models.Model):
 
 class Brand(models.Model):
     name = models.CharField(max_length=200, db_index=True,)
-    slug = AutoSlugField(populate_from='name',max_length=200, db_index=True, unique=True)
+    slug = AutoSlugField(
+        populate_from='name',
+        max_length=200,
+        db_index=True,
+        unique=True
+    )
 
     class Meta:
         ordering = ['name']
@@ -39,7 +49,12 @@ class Product(BaseModel):
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     brand = models.ForeignKey(Brand, on_delete=models.PROTECT)
     name = models.CharField(max_length=200, db_index=True)
-    slug = AutoSlugField(populate_from='name', max_length=200, db_index=True, unique=True)
+    slug = AutoSlugField(
+        populate_from='name',
+        max_length=200,
+        db_index=True,
+        unique=True
+    )
     description = models.TextField(blank=True)
     stock = models.PositiveIntegerField(default=0, blank=True)
     is_active = models.BooleanField(default=True)
@@ -79,8 +94,8 @@ class ProductPrice(models.Model):
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
-    image = models.ImageField(upload_to='images/',blank=True)
-    order = models.PositiveIntegerField(default=1, blank=True)
+    image = models.ImageField(upload_to='images/', blank=True, null=False)
+    order = models.PositiveIntegerField(default=1, blank=True, null=False)
 
     class Meta:
         ordering = ['order']

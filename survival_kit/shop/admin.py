@@ -26,7 +26,3 @@ class Category(admin.ModelAdmin):
 @admin.register(Brand)
 class Brand(admin.ModelAdmin):
     pass
-
-
-
-
