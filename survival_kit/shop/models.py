@@ -63,9 +63,6 @@ class Product(BaseModel):
         ordering = ['name']
         verbose_name_plural = "Products"
 
-    def get_absolute_url(self):
-        return reverse('product_list', kwargs={'product_slug': self.slug})
-
     def __str__(self):
         return self.name
 
