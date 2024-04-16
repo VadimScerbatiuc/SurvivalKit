@@ -30,9 +30,11 @@
 
 {% block js %}
 <script>
+const csrftoken = '{{ csrf_token }}'
 const checkboxes_by_class = Array.from(document.getElementsByClassName('form-check-input'));
 const currentUrl = new URL(location);
 const urlProductList = "{% url 'shop:product_list' %}" // jinja to string !important
+const buttons_add_to_cart = Array.from(document.getElementsByClassName('add_to_cart'));
 
 checkboxes_by_class.forEach(async function(elem){
     elem.addEventListener("change", async function(){
@@ -42,19 +44,36 @@ checkboxes_by_class.forEach(async function(elem){
             currentUrl.searchParams.append(name, value);
         } else {
             currentUrl.searchParams.delete(name, value);
-        } 
+        }
         history.pushState({}, "", currentUrl)
-        fetch(urlProductList +'?'+ currentUrl.searchParams.toString(), {method: "GET"})
-            .then(async (response) => {
-                const parser = new DOMParser();
-                const textData = await response.text()
-                const htmlData = parser.parseFromString(textData, "text/html");
-                console.log(htmlData.getElementById("id_product_list"));
-                const productList = document.getElementById("id_product_list");
-                productList.replaceWith(htmlData.getElementById("id_product_list"));
-                console.log("ff")
-            })
+        fetch(urlProductList + '?' + currentUrl.searchParams.toString(), {method: "GET"})
+        .then(async (response) => {
+            const parser = new DOMParser();
+            const textData = await response.text()
+            const htmlData = parser.parseFromString(textData, "text/html");
+            console.log(htmlData.getElementById("id_product_list"));
+            const productList = document.getElementById("id_product_list");
+            productList.replaceWith(htmlData.getElementById("id_product_list"));
+        })
     });
 });
+
+buttons_add_to_cart.forEach(async function(elem){
+    elem.addEventListener("click", async function(){
+        const product_id = this.id;
+
+        fetch("{% url 'shop:cart_view' %}", {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRFToken': csrftoken,
+            },
+            body: JSON.stringify({'product_id': product_id, 'quantity': 1})
+        })
+        .then(async response => {
+            return await response.json();
+        })
+    })
+})
 </script>
 {% endblock%}

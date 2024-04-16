@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% for item in cart %}
+        <div class="product-item border border-primary" id="{{ item.product.id }}_block">
+            <p>{{ item.product.name }}</p>
+            <div class="d-inline-flex border rounded-5">
+                <button class="btn btn-light remove_from_cart_one" id="{{ item.product.id }}"><i class="fa-solid fa-cart-shopping"></i>-</button>
+                <p id="{{ item.product.id }}_quantity">{{ item.quantity }}</p>
+                <button class="btn btn-light add_to_cart_one" id="{{ item.product.id }}"><i class="fa-solid fa-cart-shopping"></i>+</button>
+            </div>
+        </div>
+        {% empty %}
+        <p>Your cart is empty.</p>
+    {% endfor %}
+{% endblock %}
+
+{% block js %}
+<script>
+const buttonsAddOne = Array.from(document.getElementsByClassName('add_to_cart_one'));
+const buttonsRemoveOne = Array.from(document.getElementsByClassName('remove_from_cart_one'));
+const csrftoken = '{{ csrf_token }}'
+
+buttonsRemoveOne.forEach(async function(elem){
+    elem.addEventListener("click", async function(){
+        const itemId = this.id;
+        let idP = itemId + '_quantity';
+        let idBlock = itemId + '_block';
+        const quantityElem = document.getElementById(idP);
+        let quantityValue = Number(quantityElem.innerText) - 1;
+        let data = await makeRequest("{% url 'shop:cart_view' %}", method='POST',
+                                        body={'product_id': itemId, 'quantity': '-1'});
+        let status = await data.status;
+        let element = document.getElementById(idBlock);
+        if (status == 'success'){
+            if (quantityValue == 0) {
+                element.remove();
+            } else {
+                quantityElem.innerHTML = quantityValue;
+            }
+        }
+    })
+})
+
+buttonsAddOne.forEach(async function(elem){
+    elem.addEventListener("click", async function(){
+        const itemId = this.id;
+        let idP = itemId + '_quantity';
+        let quantityElem = document.getElementById(idP);
+        let quantityValue = Number(quantityElem.innerText) + 1;
+        let data = await makeRequest("{% url 'shop:cart_view' %}", method='POST', body={'product_id': itemId, 'quantity': 1});
+        let status = await data.status;
+        if (status == 'success'){
+            quantityElem.innerHTML = quantityValue;
+        }
+    })
+})
+
+async function makeRequest(url, method, body) {
+
+    let headers = {
+        'Accept': 'application/json',
+        'X-CSRFToken': csrftoken
+    }
+
+    return fetch(url, {
+        method: method,
+        headers: headers,
+        body: JSON.stringify(body)
+    })
+    .then(async response => {
+        return await response.json();
+    })
+}
+</script>
+{% endblock%}
