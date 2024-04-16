@@ -1,6 +1,9 @@
 from autoslug import AutoSlugField
+from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
+
+from users.models import UserAccount
 
 
 class BaseModel(models.Model):
@@ -97,3 +100,10 @@ class ProductImage(models.Model):
     class Meta:
         ordering = ['order']
         verbose_name_plural = "Product Images"
+
+
+class CartItem(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    quantity = models.PositiveIntegerField(default=0)
+    user = models.ForeignKey(UserAccount, on_delete=models.PROTECT)
+    date_added = models.DateTimeField(auto_now_add=True)
