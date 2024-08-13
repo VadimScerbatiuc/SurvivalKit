@@ -1,6 +1,7 @@
 from autoslug import AutoSlugField
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Sum
 from django.urls import reverse
 
 from users.models import UserAccount
@@ -58,6 +59,7 @@ class Product(BaseModel):
         db_index=True,
         unique=True
     )
+    price = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     description = models.TextField(blank=True)
     stock = models.PositiveIntegerField(default=0, blank=True)
     is_active = models.BooleanField(default=True)
@@ -75,21 +77,14 @@ class Product(BaseModel):
 
         return main_image
 
-    @property
-    def product_price(self):
-        product_price = ProductPrice.objects.filter(product=self).first()
 
-        return product_price
-
-
-class ProductPrice(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.PROTECT)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+class PriceSetting(models.Model):
+    is_active = models.BooleanField(default=True)
     currency_code = models.CharField(max_length=10, blank=False, null=False)
     currency_symbol = models.CharField(max_length=10, blank=False, null=False)
 
     class Meta:
-        verbose_name_plural = "Product Price"
+        verbose_name_plural = "Price Stettings"
 
 
 class ProductImage(models.Model):
@@ -107,3 +102,7 @@ class CartItem(models.Model):
     quantity = models.PositiveIntegerField(default=0)
     user = models.ForeignKey(UserAccount, on_delete=models.PROTECT)
     date_added = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def price_by_quantity(self):
+        return self.product.price * self.quantity

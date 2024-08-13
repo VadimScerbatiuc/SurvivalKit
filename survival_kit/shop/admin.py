@@ -8,14 +8,9 @@ class ProductImageInline(admin.StackedInline):
     extra = 0
 
 
-class ProductPriceInline(admin.StackedInline):
-    model = ProductPrice
-    extra = 0
-
-
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    inlines = [ProductImageInline, ProductPriceInline]
+    inlines = [ProductImageInline]
 
 
 @admin.register(Category)
