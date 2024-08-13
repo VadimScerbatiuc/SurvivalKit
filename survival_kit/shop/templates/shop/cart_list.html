@@ -1,18 +1,57 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% for item in cart %}
-        <div class="product-item border border-primary" id="{{ item.product.id }}_block">
-            <p>{{ item.product.name }}</p>
-            <div class="d-inline-flex border rounded-5">
-                <button class="btn btn-light remove_from_cart_one" id="{{ item.product.id }}"><i class="fa-solid fa-cart-shopping"></i>-</button>
-                <p id="{{ item.product.id }}_quantity">{{ item.quantity }}</p>
-                <button class="btn btn-light add_to_cart_one" id="{{ item.product.id }}"><i class="fa-solid fa-cart-shopping"></i>+</button>
+    <div class="justify-content-between">
+        <div class="row">
+            <div class="d-flex flex-column col">
+                <p id="empty-cart-info" class="{% if cart %}d-none{% endif %}">Your cart is empty.</p>
+                {% for item in cart %}
+                    <div class="cart-item-box d-flex" id="{{ item.product.id }}_block">
+                        <div class="me-5 cart-product-image">
+                            <img class="card-img-top card-image" {% if item.product.main_image %} src="{{ item.product.main_image.image.url }} " {% endif %} alt="Card image cap">
+                        </div>
+                        <div>
+                            <h2>{{ item.product.name }}</h2>
+                            <div class="d-flex justify-content-between">
+                                <p>Price: </p>
+                                <p id="{{ item.product_id }}_price">{{ item.price_by_quantity }}</p>
+                            </div>
+                            <!-- add/remove button -->
+                            <div class="d-inline-flex border rounded-5 align-item-center ">
+                                <button class="btn remove_from_cart_one" id="{{ item.product.id }}">{% if item.quantity == 1 %}<i class="fa-solid fa-trash"></i>{% else %}<i class="fa-solid fa-minus"></i>{% endif %}</button>
+                                <h3 id="{{ item.product.id }}_quantity" class="m-0">{{ item.quantity }}</h3>
+                                <button class="btn add_to_cart_one" id="{{ item.product.id }}"><i class="fa-solid fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="border border-secondary border-2 order-window col">
+                <h5 class="d-flex justify-content-center">ORDER SUMMARY</h5>
+                <div class="d-flex flex-column margin-order">
+                    <div class="d-flex justify-content-center justify-content-between">
+                        <p>Subtotal</p>
+                        <p>{{ total_price }} MDL</p>
+                    </div>
+                    <div class="d-flex justify-content-center justify-content-between">
+                        <p>Shipping</p>
+                        <p>0 MDL</p>
+                    </div>
+                </div>
+                <div class="d-flex text-end margin-order">
+                    <h5 class="col">Total: </h5>
+                    <h5 class="col" id="total-price">{{ total_price }}</h5>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button class="button-order">Continue & Play </button>
+                </div>
+                <div class="d-flex justify-content-center margin-order ">
+                    <p>By confirming your order, you agree to <a href="#" class="terms-link">The Terms & Conditions</a></p>
+                </div>
             </div>
         </div>
-        {% empty %}
-        <p>Your cart is empty.</p>
-    {% endfor %}
+    </div>
 {% endblock %}
 
 {% block js %}
@@ -25,19 +64,32 @@ buttonsRemoveOne.forEach(async function(elem){
     elem.addEventListener("click", async function(){
         const itemId = this.id;
         let idP = itemId + '_quantity';
+        let idPrice = itemId + '_price';
         let idBlock = itemId + '_block';
-        const quantityElem = document.getElementById(idP);
+        let quantityElem = document.getElementById(idP);
         let quantityValue = Number(quantityElem.innerText) - 1;
         let data = await makeRequest("{% url 'shop:cart_view' %}", method='POST',
                                         body={'product_id': itemId, 'quantity': '-1'});
-        let status = await data.status;
+        let status = data.status;
+        let isEmpty = data.queryset_isempty;
+        let totalPrice = data.total_price;
+        let priceByQuantity = data.price_by_quantity;
         let element = document.getElementById(idBlock);
+        let emptyMessage = document.getElementById('empty-cart-info');
         if (status == 'success'){
+            changePriceByQuntity(idPrice, priceByQuantity, totalPrice);
             if (quantityValue == 0) {
                 element.remove();
-            } else {
+            } else if(quantityValue == 1){
+                elem.innerHTML = '<i class="fa-solid fa-trash"></i>';
+                quantityElem.innerHTML = quantityValue;
+            } else{
                 quantityElem.innerHTML = quantityValue;
             }
+
+        }
+        if (isEmpty){
+            emptyMessage.classList.remove("d-none");
         }
     })
 })
@@ -46,12 +98,17 @@ buttonsAddOne.forEach(async function(elem){
     elem.addEventListener("click", async function(){
         const itemId = this.id;
         let idP = itemId + '_quantity';
+        let idPrice = itemId + '_price';
         let quantityElem = document.getElementById(idP);
         let quantityValue = Number(quantityElem.innerText) + 1;
         let data = await makeRequest("{% url 'shop:cart_view' %}", method='POST', body={'product_id': itemId, 'quantity': 1});
-        let status = await data.status;
+        let status = data.status;
+        let priceByQuantity = data.price_by_quantity;
+        let totalPrice = data.total_price;
         if (status == 'success'){
             quantityElem.innerHTML = quantityValue;
+            document.getElementById(itemId).innerHTML = '<i class="fa-solid fa-minus">';
+            changePriceByQuntity(idPrice, priceByQuantity, totalPrice)
         }
     })
 })
@@ -72,5 +129,11 @@ async function makeRequest(url, method, body) {
         return await response.json();
     })
 }
+
+function changePriceByQuntity(pId, priceByQuantity, totalPrice){
+        document.getElementById(pId).innerHTML = priceByQuantity;
+        document.getElementById('total-price').innerHTML = totalPrice;
+}
+
 </script>
 {% endblock%}
