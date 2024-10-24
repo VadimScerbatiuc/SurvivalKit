@@ -1,30 +1,32 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="d-flex">
-    <div class="d-flex flex-column">
-        <p>Categories</p>
-        {% for category in categories %}
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="category" value="{{ category.slug }}" id="id_{{ category.slug }}" {% if category.slug in active_categories %}checked{% endif %}>
-                <label class="form-check-label" for="id_{{ category.slug }}">
-                    {{ category.name }}
-                </label>
-            </div>
-        {% endfor %}
-        <br>
-        <p>Brands</p>
-        {% for brand in brands %}
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="brand" value="{{ brand.slug }}" id="id_{{ brand.slug }}" {% if brand.slug in active_brands %}checked{% endif %}>
-                <label class="form-check-label" for="id_{{ brand.slug }}">
-                    {{ brand.name }}
-                </label>
-            </div>
-        {% endfor %}
-        <br>
+<div class="container">
+    <div class="d-flex">
+        <div class="d-flex flex-column">
+            <p>Categories</p>
+            {% for category in categories %}
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="category" value="{{ category.slug }}" id="id_{{ category.slug }}" {% if category.slug in active_categories %}checked{% endif %}>
+                    <label class="form-check-label" for="id_{{ category.slug }}">
+                        {{ category.name }}
+                    </label>
+                </div>
+            {% endfor %}
+            <br>
+            <p>Brands</p>
+            {% for brand in brands %}
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="brand" value="{{ brand.slug }}" id="id_{{ brand.slug }}" {% if brand.slug in active_brands %}checked{% endif %}>
+                    <label class="form-check-label" for="id_{{ brand.slug }}">
+                        {{ brand.name }}
+                    </label>
+                </div>
+            {% endfor %}
+            <br>
+        </div>
+        {% include 'shop/includes/product_list.html' %}
     </div>
-    {% include 'shop/includes/product_list.html' %}
 </div>
 {% endblock%}
 
@@ -71,7 +73,14 @@ buttons_add_to_cart.forEach(async function(elem){
             body: JSON.stringify({'product_id': product_id, 'quantity': 1})
         })
         .then(async response => {
-            return await response.json();
+            let data = await response.json();
+            let status = await data.status;
+            if (status == 'success'){
+                toastr.success('Have fun storming the castle!', 'Miracle Max Says');
+            }
+            else{
+                toastr.error('error');
+            }
         })
     })
 })
