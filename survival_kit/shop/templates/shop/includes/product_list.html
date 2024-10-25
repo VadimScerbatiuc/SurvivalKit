@@ -1,40 +1,35 @@
-<div class="container" id="id_product_list">
-    <section style="background-color: #eee;">
-        <div class="container py-5">
-            <div class="row justify-content-center">
-                {% for prod in products %}
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="card text-black">
-                            <i class="fab fa-apple fa-lg pt-3 pb-1 px-3"></i>
-                            <a class="card-link link-text">
-                                <img class="card-img-top" {% if prod.main_image %} src="{{ prod.main_image.image.url }}" {% endif %} alt="Card image cap">
-                                <h5 class="text-center">{{ prod.name }}</h5>
-                            </a>
-                            <div class="card-body">
-                                <div class="text-center">
-                                  <p class="text-muted mb-4">{{ prod.category }}</p>
-                                </div>
-                                <div>
-                                    <p class="card-text description-text-color">{{ prod.description }}</p>
-                                </div>
-                                <div class="d-flex justify-content-between total font-weight-bold mt-4">
-                                    <span>Price</span>
-                                    <span>
-                                        {% if prod.product_price %}
-                                            {{ prod.product_price.price }}
-                                            {{ prod.product_price.currency_symbol }}
-                                        {% endif %}
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-center">
-                                <a href="#" class="btn btn-light" ><i class="fa-solid fa-cart-shopping"></i>Details</a>
-                                <button class="btn btn-light add_to_cart" id="{{ prod.id }}" ><i class="fa-solid fa-cart-shopping"></i>Add to cart</button>
-                            </div>
-                        </div>
+<div class="" id="id_product_list">
+    <div class="container">
+        <div class="row justify-content-center">
+            {% for prod in products %}
+                <div class=" col-3 card card-box m-2 mb-2">
+                    <div class="card-image-box border border-secondary ">
+                        <img class="card-img-top card-image border card-image-box " {% if prod.main_image %} src="{{ prod.main_image.image.url }} " {% endif %} alt="Card image cap">
                     </div>
-                {% endfor %}
-            </div>
+                    <div class="card-body">
+                    <h5 class="card-title">{{ prod.name }}</h5>
+                    <div class="text-center">
+                      <p class="text-muted mb-4">{{ prod.category }}</p>
+                    </div>
+                    <p class="card-text card-description">{{ prod.description }}</p>
+                        <div class="d-flex justify-content-between total font-weight-bold mt-4">
+                            <span>Price</span>
+                            <span>
+                                {% if prod.price %}
+                                    {{ prod.price }}
+    <!--                                            {{ prod.product_price.currency_symbol }}-->
+                                {% endif %}
+                            </span>
+                        </div>
+                    <button class="btn  btn-light add_to_cart card-button" id="{{ prod.id }}" ><i class="fa-solid fa-cart-shopping"></i> Add to cart</button>
+                    </div>
+                </div>
+<!--                        <a class="card-link link-text card-link ">-->
+<!--                            <img class="card-img-top card-image border card-image-box" {% if prod.main_image %} src="{{ prod.main_image.image.url }} " {% endif %} alt="Card image cap">-->
+<!--                            <h5 class="text-center pt-3">{{ prod.name }}</h5>-->
+<!--                        </a>-->
+
+            {% endfor %}
         </div>
-    </section>
+    </div>
  </div>
