@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.http import JsonResponse
 
-from shop.forms import CreateProductForm
+from shop.forms import ProductCreateForm, ProductForm
 from shop.models import Product, Category, Brand, CartItem
 from shop.services import *
 from shop.services.shopping_cart import CartService
@@ -126,7 +126,7 @@ class RememberAll(View):
     model = Product
     template_name = 'shop/remember.html'
     context_object_name = 'remember'
-    form_class = CreateProductForm()
+    form_class = ProductForm()
     brands_list = Brand.objects.all()
     categories_list = Category.objects.all()
 
@@ -151,7 +151,7 @@ class RememberAll(View):
         )
 
     def post(self, request):
-        create_product_form = CreateProductForm(request.POST)
+        create_product_form = ProductForm(request.POST)
         template_name = 'shop/remember.html'
 
         if create_product_form.is_valid():
@@ -171,3 +171,64 @@ class RememberAll(View):
                 'categories_list': self.categories_list,
                 self.context_object_name: self.get_queryset(request),
             })
+
+
+class ProductCreateView(View):
+    model = Product
+    template_name = 'shop/product_create.html'
+    form_class = ProductCreateForm
+    context_object_name = 'new_product'
+
+    def get(self, request):
+
+        return render(
+            request,
+            self.template_name,
+            {
+                'form': self.form_class,
+            }
+        )
+
+    def post(self, request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            form.save()
+
+        return render(
+            request,
+            self.template_name,
+            {
+                'form': form,
+
+            }
+        )
+
+
+class ImproveView(View):
+    model = Product
+    template_name = 'shop/improve.html'
+    content_object_name = 'products'
+    form_class = ProductCreateForm
+
+    def get(self, request):
+        return render(
+            request,
+            self.template_name,
+            {
+                self.content_object_name: self.model.objects.all(),
+                'form': self.form_class,
+            }
+        )
+
+    def post(self, request):
+
+
+
+        return render(
+            request,
+            self.template_name,
+            {
+                'form': self.form_class,
+            }
+        )
+

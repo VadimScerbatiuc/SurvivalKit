@@ -16,6 +16,12 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'shop:cart_view' %}">My Cart</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'shop:product_create' %}">Create Product</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'shop:improve' %}">Learnsmt</a>
+                </li>
             </ul>
                 <div class="d-flex align-items-center">
                     {% if request.user.is_authenticated %}
