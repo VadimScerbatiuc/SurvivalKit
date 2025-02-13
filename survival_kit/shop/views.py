@@ -1,5 +1,6 @@
 import json
 
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.http import JsonResponse
@@ -210,19 +211,24 @@ class ImproveView(View):
     content_object_name = 'products'
     form_class = ProductCreateForm
 
+    paginator = Paginator(model.objects.all(), 1)
+
     def get(self, request):
+        page_number = request.GET.get('page')
+        page_object = self.paginator.get_page(page_number)
+
+
         return render(
             request,
             self.template_name,
             {
                 self.content_object_name: self.model.objects.all(),
                 'form': self.form_class,
+                'page_object': page_object,
             }
         )
 
     def post(self, request):
-
-
 
         return render(
             request,

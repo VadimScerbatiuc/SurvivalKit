@@ -2,8 +2,29 @@
 
 {% block content %}
     <div>
-        {% for product in products %}
-            <p>{{ product.name }}</p>
-        {% endfor %}
+
+        <nav aria-label="Page navigation example">
+            {% if page_object.has_other_pages %}
+                <ul class="pagination justify-content-center">
+                    <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+                    <li class="page-item {% if not page_object.has_previous %}disabled{% endif %}"><a class="page-link" href="{% if page_object.has_previous %}?page={{ page_object.previous_page_number }}{% else %}#{% endif %}">Previous</a></li>
+
+                    {% for page_num in page_object.paginator.page_range %}
+                        {% if page_num >= page_object.number|add:-2 and page_num <= page_object.number|add:2  %}
+                            <li class="page-item {% if page_object.number == page_num %}active{% endif %}"><a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+
+                    <li class="page-item {% if not page_object.has_next %}disabled{% endif %}"><a class="page-link" href="{% if page_object.has_next %}?page={{ page_object.next_page_number }}{% else %}#{% endif %}">Next</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_object.paginator.num_pages}}">Last</a></li>
+
+                </ul>
+            {% endif %}
+        </nav>
+        <hr>
+            {% for product in page_object %}
+                <p>{{ product.name }}</p>
+            {% endfor %}
+
     </div>
 {% endblock %}
