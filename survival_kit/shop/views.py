@@ -238,3 +238,19 @@ class ImproveView(View):
             }
         )
 
+def search(request):
+
+    if request.method == "POST":
+        searched = request.POST.get('searched')
+        return render(
+            request,
+            "shop/search.html",
+            {'searched': searched}
+        )
+
+    else:
+        return render(
+            request,
+            "shop/search.html",
+            {}
+        )

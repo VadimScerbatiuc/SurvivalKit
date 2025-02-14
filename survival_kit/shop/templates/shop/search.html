@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <form method="post" action="{% url 'shop:search' %}">
+        {% csrf_token %}
+        <div class="mb-3">
+            <input type="text" class="form-control" placeholder="Поиск продукт" name="searched">
+        </div>
+        <button type="submit" class="btn btn-primary">Поиск</button>
+    </form>
+    </br></br></br>
+    <h1>{{ searched }}</h1>
+</div>
+
+
+{% endblock %}
