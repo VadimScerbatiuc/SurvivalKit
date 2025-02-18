@@ -24,6 +24,10 @@
                 </div>
             {% endfor %}
             <br>
+
+            <input type="text" class="form-control" id="search-input" placeholder="Поиск продукт" name="search">
+
+
         </div>
         {% include 'shop/includes/product_list.html' %}
     </div>
@@ -47,18 +51,45 @@ checkboxes_by_class.forEach(async function(elem){
         } else {
             currentUrl.searchParams.delete(name, value);
         }
-        history.pushState({}, "", currentUrl)
+        // Обновляем URL и отправляем запрос
+        updateURLAndFetch();
+    });
+});
+
+// Обработчик для поля ввода поиска
+const searchInput = document.getElementById("search-input");
+searchInput.addEventListener("input", function() {
+    const searchQuery = this.value;
+
+    // Обновляем параметр поиска в URL
+    if (searchQuery) {
+        currentUrl.searchParams.set("search", searchQuery); // "search" - это параметр для поиска
+    } else {
+        currentUrl.searchParams.delete("search");
+    }
+
+    // Обновляем URL и отправляем запрос
+    updateURLAndFetch();
+});
+
+function updateURLAndFetch(){
+
+    history.pushState({}, "", currentUrl)
+    console.log(currentUrl)
         fetch(urlProductList + '?' + currentUrl.searchParams.toString(), {method: "GET"})
         .then(async (response) => {
             const parser = new DOMParser();
             const textData = await response.text()
             const htmlData = parser.parseFromString(textData, "text/html");
-            console.log(htmlData.getElementById("id_product_list"));
+            //console.log(htmlData.getElementById("id_product_list"));
             const productList = document.getElementById("id_product_list");
             productList.replaceWith(htmlData.getElementById("id_product_list"));
         })
-    });
-});
+
+}
+
+
+
 
 buttons_add_to_cart.forEach(async function(elem){
     elem.addEventListener("click", async function(){

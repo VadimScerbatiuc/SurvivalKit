@@ -9,6 +9,7 @@ from shop.forms import ProductCreateForm, ProductForm
 from shop.models import Product, Category, Brand, CartItem
 from shop.services import *
 from shop.services.shopping_cart import CartService
+from django.db.models import Q
 
 
 class ShopBasePageView(View):
@@ -25,11 +26,14 @@ class ProductPageView(View):
     context_object_name = 'products'
 
     def get_queryset(self, request):
+        print(request.GET.get('search'))
         queryset = Product.objects.all()
         if request.GET.getlist('category'):
             queryset = queryset.filter(category__slug__in=request.GET.getlist('category'))
         if request.GET.get('brand'):
             queryset = queryset.filter(brand__slug__in=request.GET.getlist('brand'))
+        if request.GET.get('search'):
+            queryset = queryset.filter(name__icontains=request.GET.get('search'))
 
         return queryset
 
@@ -242,10 +246,16 @@ def search(request):
 
     if request.method == "POST":
         searched = request.POST.get('searched')
+        outputt = Product.objects.filter(Q(name__icontains=searched) | Q(description__icontains=searched))
+
         return render(
             request,
             "shop/search.html",
-            {'searched': searched}
+
+            {
+                'searched': searched,
+                'filtresult': outputt
+            }
         )
 
     else:
