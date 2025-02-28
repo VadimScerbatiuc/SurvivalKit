@@ -26,7 +26,6 @@ class ProductPageView(View):
     context_object_name = 'products'
 
     def get_queryset(self, request):
-        print(request.GET.get('search'))
         queryset = Product.objects.all()
         if request.GET.getlist('category'):
             queryset = queryset.filter(category__slug__in=request.GET.getlist('category'))

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container">
+
     <div class="d-flex">
         <div class="d-flex flex-column">
             <p>Categories</p>
@@ -24,14 +24,11 @@
                 </div>
             {% endfor %}
             <br>
-
             <input type="text" class="form-control" id="search-input" placeholder="Поиск продукт" name="search">
-
-
         </div>
         {% include 'shop/includes/product_list.html' %}
     </div>
-</div>
+
 {% endblock%}
 
 {% block js %}
@@ -73,7 +70,6 @@ searchInput.addEventListener("input", function() {
 });
 
 function updateURLAndFetch(){
-
     history.pushState({}, "", currentUrl)
     console.log(currentUrl)
         fetch(urlProductList + '?' + currentUrl.searchParams.toString(), {method: "GET"})
@@ -87,9 +83,6 @@ function updateURLAndFetch(){
         })
 
 }
-
-
-
 
 buttons_add_to_cart.forEach(async function(elem){
     elem.addEventListener("click", async function(){

@@ -1,5 +1,25 @@
 <div class="" id="id_product_list">
-    <div class="container">
+        <div class="row gy-3">
+            {% for prod in products %}
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="card rounded-4 shadow-lg border-0 mb-5 h-100">
+                        <img class="card-img-top border mb-1" {% if prod.main_image %} src="{{ prod.main_image.image.url }} " {% endif %} alt="Card image cap">
+                        <div class="card-body d-flex flex-column">
+                            <h4 class="fw-bold card-title">{{ prod.name }}</h4>
+                            <p class="text-muted">{{ prod.category }}</p>
+                            <p class="card-description">{{ prod.description }}</p>
+                            <h2 class="fs-1 fw-bold mb-3 mt-auto">
+                                {% if prod.price %}
+                                    {{ prod.price }}
+                                    {{ prod.product_price.currency_symbol }}
+                                {% endif %}
+                            </h2>
+                            <button class="btn btn-dark rounded-4 mt-2 mb-4 add_to_cart" id="{{ prod.id }}" ><i class="fa-solid fa-cart-shopping"></i> Add to cart</button>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+ <!--
         <div class="row justify-content-center">
             {% for prod in products %}
                 <div class=" col-3 card card-box m-2 mb-2">
@@ -17,19 +37,22 @@
                             <span>
                                 {% if prod.price %}
                                     {{ prod.price }}
-    <!--                                            {{ prod.product_price.currency_symbol }}-->
+                                                {{ prod.product_price.currency_symbol }}
                                 {% endif %}
                             </span>
                         </div>
                     <button class="btn  btn-light add_to_cart card-button" id="{{ prod.id }}" ><i class="fa-solid fa-cart-shopping"></i> Add to cart</button>
                     </div>
                 </div>
-<!--                        <a class="card-link link-text card-link ">-->
-<!--                            <img class="card-img-top card-image border card-image-box" {% if prod.main_image %} src="{{ prod.main_image.image.url }} " {% endif %} alt="Card image cap">-->
-<!--                            <h5 class="text-center pt-3">{{ prod.name }}</h5>-->
-<!--                        </a>-->
+                        <a class="card-link link-text card-link ">
+                            <img class="card-img-top card-image border card-image-box" {% if prod.main_image %} src="{{ prod.main_image.image.url }} " {% endif %} alt="Card image cap">
+                            <h5 class="text-center pt-3">{{ prod.name }}</h5>
+                        </a>
 
-            {% endfor %}
-        </div>
+            {% endfor %}  -->
+    </div>
+
+
+
     </div>
  </div>
