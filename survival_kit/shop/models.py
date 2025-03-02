@@ -71,6 +71,9 @@ class Product(BaseModel):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('shop:product_detail', args=[self.slug])
+
     @property
     def main_image(self):
         main_image = ProductImage.objects.filter(product=self).first()
