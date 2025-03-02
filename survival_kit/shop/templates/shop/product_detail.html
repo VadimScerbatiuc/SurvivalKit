@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="d-flex border">
+            <img class="" {% if product.main_image %} src="{{ product.main_image.image.url }} " {% endif %} alt="Card image cap">
+            <div class="d-flex flex-column width-100">
+                <h4 class="fw-bold">{{ product.name }}</h4>
+                <p>{{ product.description }}</p><hr>
+                <p>Categories: {{ product.category }}</p><hr>
+                <p>Price: {{ product.price }}</p>
+                <div class="input-group input-group-sm mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Quantity</span>
+                    <input type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="product-quantity-input-value" value="0">
+                    <button class="btn btn-outline-secondary add-to-cart-button" type="button" id="add-to-cart-button-{{ product.id }}">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+<script>
+const addToCartButton = document.getElementById('add-to-cart-button-{{ product.id }}');
+const csrftoken = '{{ csrf_token }}';
+
+addToCartButton.addEventListener("click", async function(){
+    const productId = this.id.split('add-to-cart-button-')[1];
+    const inputValue = document.getElementById('product-quantity-input-value').value;
+    console.log(productId, inputValue);
+    fetch("{% url 'shop:cart_view' %}", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'X-CSRFToken': csrftoken,
+        },
+        body: JSON.stringify({'product_id': 1, 'quantity': inputValue})
+    })
+    .then(async response => {
+        let data = await response.json();
+        let status = await data.status;
+        if (status == 'success'){
+            toastr.success('Have fun storming the castle!', 'Miracle Max Says');
+        }
+        else{
+            toastr.error('error');
+        }
+    })
+})
+
+</script>
+{% endblock %}

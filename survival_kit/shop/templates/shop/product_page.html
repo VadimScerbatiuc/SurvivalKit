@@ -33,7 +33,7 @@
 
 {% block js %}
 <script>
-const csrftoken = '{{ csrf_token }}'
+const csrftoken = '{{ csrf_token }}';
 const checkboxes_by_class = Array.from(document.getElementsByClassName('form-check-input'));
 const currentUrl = new URL(location);
 const urlProductList = "{% url 'shop:product_list' %}" // jinja to string !important

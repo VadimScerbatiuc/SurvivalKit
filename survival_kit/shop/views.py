@@ -104,6 +104,7 @@ class CartView(View):
         product_id = data.get('product_id')
         quantity = int(data.get('quantity', 0))
         product = get_object_or_404(Product, id=product_id)
+        print(product)
         cart_item, created = CartItem.objects.get_or_create(user=request.user, product=product)
         new_quantity = cart_item.quantity + quantity
         price_by_quantity = cart_item.product.price * new_quantity
@@ -127,55 +128,6 @@ class CartView(View):
             status=200
         )
 
-class RememberAll(View):
-    model = Product
-    template_name = 'shop/remember.html'
-    context_object_name = 'remember'
-    form_class = ProductForm()
-    brands_list = Brand.objects.all()
-    categories_list = Category.objects.all()
-
-    def get_queryset(self, request):
-        queryset = Product.objects.filter(pk__gte=4)
-
-        return queryset
-
-    def get(self, request):
-        services1 = CartService(request.user)
-
-        return render(
-            request,
-            self.template_name,
-            {
-                self.context_object_name: self.get_queryset(request),
-                'form': self.form_class,
-                'brands_list': self.brands_list,
-                'categories_list': self.categories_list,
-                'service1': services1.get_price_by_quantity()
-            }
-        )
-
-    def post(self, request):
-        create_product_form = ProductForm(request.POST)
-        template_name = 'shop/remember.html'
-
-        if create_product_form.is_valid():
-            try:
-                Product.objects.create(**create_product_form.cleaned_data)
-                return redirect('remember')
-            except:
-                create_product_form.add_error(None,'Oshibka blia')
-
-        return render(
-            request,
-            template_name,
-            {
-                'form': self.form_class,
-                'brands_list': self.brands_list,
-                'categories_list': self.categories_list,
-                'categories_list': self.categories_list,
-                self.context_object_name: self.get_queryset(request),
-            })
 
 
 class ProductCreateView(View):
@@ -263,4 +215,18 @@ def search(request):
             request,
             "shop/search.html",
             {}
+        )
+
+
+class ProductDetailView(View):
+
+    def get(self, request, product_slug):
+        product = get_object_or_404(Product, slug=product_slug)
+
+        return render(
+            request,
+            'shop/product_detail.html',
+            {
+                'product': product,
+            }
         )
