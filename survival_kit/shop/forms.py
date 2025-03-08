@@ -1,6 +1,6 @@
 from django import forms
 from .models import *
-
+# TODO: empty lines???
 class ProductForm(forms.Form):
     name = forms.CharField(label='Name')
     category = forms.ModelChoiceField(queryset=Category.objects.all(), label='Category')

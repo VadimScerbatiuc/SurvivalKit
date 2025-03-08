@@ -1,3 +1,4 @@
+# TODO: fix it, this line may be longer, that's not a issue
 from django.contrib.auth.models import (AbstractBaseUser,
                                         BaseUserManager, PermissionsMixin)
 from django.db import models

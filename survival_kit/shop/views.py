@@ -1,3 +1,4 @@
+# TODO: remove unised imports
 import json
 
 from django.core.paginator import Paginator
@@ -26,6 +27,7 @@ class ProductPageView(View):
     context_object_name = 'products'
 
     def get_queryset(self, request):
+        # TODO: move it to a service or util to reuse as this code used in another view
         queryset = Product.objects.all()
         if request.GET.getlist('category'):
             queryset = queryset.filter(category__slug__in=request.GET.getlist('category'))
@@ -55,6 +57,7 @@ class ProductPageView(View):
 
 
 class ProductListView(View):
+    # TODO: try to change this View class to Detail view or something to remove this get method
     model = Product
     template_name = 'shop/includes/product_list.html'
     context_object_name = 'products'
@@ -89,6 +92,7 @@ class CartView(View):
         return queryset
 
     def get(self, request):
+        # TODO: rename this variable to a better one
         services1 = CartService(request.user)
         return render(
             request,
@@ -104,10 +108,12 @@ class CartView(View):
         product_id = data.get('product_id')
         quantity = int(data.get('quantity', 0))
         product = get_object_or_404(Product, id=product_id)
+        # TODO: print
         print(product)
         cart_item, created = CartItem.objects.get_or_create(user=request.user, product=product)
         new_quantity = cart_item.quantity + quantity
         price_by_quantity = cart_item.product.price * new_quantity
+        # TODO: rename this variable to a better one
         services1 = CartService(request.user)
 
         if new_quantity == 0:
@@ -127,10 +133,12 @@ class CartView(View):
             },
             status=200
         )
+# TODO: remove empty lines
 
 
 
 class ProductCreateView(View):
+    # TODO: this can be a FormView instead of View
     model = Product
     template_name = 'shop/product_create.html'
     form_class = ProductCreateForm
@@ -162,6 +170,7 @@ class ProductCreateView(View):
 
 
 class ImproveView(View):
+    # TODO: Remove this view and url if it's not needed
     model = Product
     template_name = 'shop/improve.html'
     content_object_name = 'products'
@@ -170,6 +179,7 @@ class ImproveView(View):
     paginator = Paginator(model.objects.all(), 1)
 
     def get(self, request):
+        # TODO: WTF
         page_number = request.GET.get('page')
         page_object = self.paginator.get_page(page_number)
 
@@ -185,7 +195,7 @@ class ImproveView(View):
         )
 
     def post(self, request):
-
+        # TODO: WTF
         return render(
             request,
             self.template_name,
@@ -195,7 +205,7 @@ class ImproveView(View):
         )
 
 def search(request):
-
+    # TODO: if you need it, change it to class, if no remove, and fix empty lines above
     if request.method == "POST":
         searched = request.POST.get('searched')
         outputt = Product.objects.filter(Q(name__icontains=searched) | Q(description__icontains=searched))
@@ -219,13 +229,13 @@ def search(request):
 
 
 class ProductDetailView(View):
-
+    # TODO: Try to change it to Detail view or something like that, to remove get method
     def get(self, request, product_slug):
         product = get_object_or_404(Product, slug=product_slug)
 
         return render(
             request,
-            'shop/product_detail.html',
+            'shop/product_detail.html', # TODO: move it no template variable
             {
                 'product': product,
             }

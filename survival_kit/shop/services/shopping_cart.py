@@ -6,6 +6,7 @@ class CartService:
         self.user = user
 
     def get_price_by_quantity(self):
+        # TODO: unused method
         cart_items = CartItem.objects.filter(user=self.user)
 
         return cart_items.product.price * cart_items.quantity
@@ -20,4 +21,5 @@ class CartService:
         return total_price
 
     def get_price_setting(self):
-       return PriceSetting.objects.filter(is_active=True)
+        # TODO: Move this to 'templatetags' to be able to render price currency on all templates
+        return PriceSetting.objects.filter(is_active=True)
