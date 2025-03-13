@@ -1,15 +1,8 @@
 from shop.models import CartItem, PriceSetting
 
-
 class CartService:
     def __init__(self, user):
         self.user = user
-
-    def get_price_by_quantity(self):
-        # TODO: unused method
-        cart_items = CartItem.objects.filter(user=self.user)
-
-        return cart_items.product.price * cart_items.quantity
 
     def get_total_price(self):
         cart_items = CartItem.objects.filter(user=self.user)

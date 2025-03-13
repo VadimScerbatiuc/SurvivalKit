@@ -19,12 +19,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'shop:product_create' %}">Create Product</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'shop:improve' %}">Learnsmt</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'shop:search' %}">Search_r</a>
-                </li>
             </ul>
                 <div class="d-flex align-items-center">
                     {% if request.user.is_authenticated %}
