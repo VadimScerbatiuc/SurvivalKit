@@ -1,3 +1,4 @@
+# TODO: remove unused imports
 from django.contrib.auth import logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
@@ -23,6 +24,7 @@ class SignInView(LoginView):
         return reverse_lazy('shop:main_page')
 
 
+# TODO: typo
 class SignoutView(View):
     def get(self, request):
         logout(request)
