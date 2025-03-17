@@ -1,6 +1,5 @@
 import json
 
-from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
@@ -69,13 +68,13 @@ class CartView(View):
         return queryset
 
     def get(self, request):
-        product_total_price = CartService(request.user)
+        cart_service = CartService(request.user)
         return render(
             request,
             self.template_name,
             {
                 self.context_object_name: self.get_queryset(request),
-                'total_price': product_total_price.get_total_price(), #?? self.
+                'total_price': cart_service.get_total_price()
             }
         )
 
@@ -87,7 +86,7 @@ class CartView(View):
         cart_item, created = CartItem.objects.get_or_create(user=request.user, product=product)
         new_quantity = cart_item.quantity + quantity
         price_by_quantity = cart_item.product.price * new_quantity
-        product_total_price = CartService(request.user)
+        cart_service = CartService(request.user)
 
         if new_quantity == 0:
             cart_item.delete()
@@ -102,7 +101,7 @@ class CartView(View):
                 'status': 'success',
                 'queryset_isempty': queryset_isempty,
                 'price_by_quantity': price_by_quantity,
-                'total_price': product_total_price.get_total_price(),
+                'total_price': cart_service.get_total_price(),
             },
             status=200
         )

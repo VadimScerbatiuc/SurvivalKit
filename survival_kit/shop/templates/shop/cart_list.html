@@ -58,8 +58,9 @@
 
 {% block js %}
     <script>
-        var cartViewUrl = "{% url 'shop:cart_view' %}";  // Передача URL через Django шаблонный тег
+        window.cartViewUrl = "{% url 'shop:cart_view' %}";
+        window.csrftoken = '{{ csrf_token }}';
     </script>
-<script src="{% static 'shop/javascript/cart_list.js' %}">
-</script>
+    <script src="{% static 'shop/javascript/cart_list.js' %}">
+    </script>
 {% endblock%}

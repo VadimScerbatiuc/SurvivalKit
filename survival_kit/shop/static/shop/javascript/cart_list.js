@@ -1,6 +1,5 @@
 const buttonsAddOne = Array.from(document.getElementsByClassName('add_to_cart_one'));
 const buttonsRemoveOne = Array.from(document.getElementsByClassName('remove_from_cart_one'));
-const csrftoken = '{{ csrf_token }}'
 
 buttonsRemoveOne.forEach(async function(elem){
     elem.addEventListener("click", async function(){
@@ -10,7 +9,7 @@ buttonsRemoveOne.forEach(async function(elem){
         let idBlock = itemId + '_block';
         let quantityElem = document.getElementById(idP);
         let quantityValue = Number(quantityElem.innerText) - 1;
-        let data = await makeRequest("cartViewUrl", method='POST',
+        let data = await makeRequest(window.cartViewUrl, method='POST',
                                         body={'product_id': itemId, 'quantity': '-1'});
         let status = data.status;
         let isEmpty = data.queryset_isempty;
@@ -43,7 +42,7 @@ buttonsAddOne.forEach(async function(elem){
         let idPrice = itemId + '_price';
         let quantityElem = document.getElementById(idP);
         let quantityValue = Number(quantityElem.innerText) + 1;
-        let data = await makeRequest("{% url 'shop:cart_view' %}", method='POST', body={'product_id': itemId, 'quantity': 1});
+        let data = await makeRequest(window.cartViewUrl, method='POST', body={'product_id': itemId, 'quantity': 1});
         let status = data.status;
         let priceByQuantity = data.price_by_quantity;
         let totalPrice = data.total_price;
@@ -59,7 +58,7 @@ async function makeRequest(url, method, body) {
 
     let headers = {
         'Accept': 'application/json',
-        'X-CSRFToken': csrftoken
+        'X-CSRFToken': window.csrftoken
     }
 
     return fetch(url, {

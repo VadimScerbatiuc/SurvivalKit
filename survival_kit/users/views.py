@@ -22,8 +22,7 @@ class SignInView(LoginView):
         return reverse_lazy('shop:main_page')
 
 
-# TODO: typo
-class SignoutView(View):
+class SignOutView(View):
     def get(self, request):
         logout(request)
         return redirect('users:sign_in')
