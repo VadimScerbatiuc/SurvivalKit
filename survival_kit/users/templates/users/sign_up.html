@@ -9,40 +9,35 @@
                 <label for="id_email" class="form-label">Email </label>
                 <input type="email" name="email" id="id_email" required class="form-control">
                 {% for error in form.email.errors %}
-                <!--TODO: remove inline style to text-danger from bootstrap -->
-                <p style="color: red">{{ error }}</p>
+                <p class="error-color">{{ error }}</p>
                 {% endfor %}
             </div>
             <div class="mb-3">
                 <label for="id_first_name" class="form-label">First Name </label>
                 <input type="text" name="first_name" id="id_first_name" required class="form-control">
                 {% for error in form.first_name.errors %}
-                <!--TODO: remove inline style to text-danger from bootstrap -->
-                <p style="color: red">{{ error }}</p>
+                <p class="error-color">{{ error }}</p>
                 {% endfor %}
             </div>
             <div class="mb-3">
                 <label for="id_last_name" class="form-label">Last Name </label>
                 <input type="text" name="last_name" id="id_last_name" required class="form-control">
                 {% for error in form.last_name.errors %}
-                <!--TODO: remove inline style to text-danger from bootstrap -->
-                <p style="color: red">{{ error }}</p>
+                <p class="error-color">{{ error }}</p>
                 {% endfor %}
             </div>
              <div class="mb-3">
                 <label for="id_password1" class="form-label">Password </label>
                 <input type="password" name="password1" id="id_password1" required class="form-control">
                 {% for error in form.password1.errors %}
-                 <!--TODO: remove inline style to text-danger from bootstrap -->
-                <p style="color: red">{{ error }}</p>
+                <p class="error-color">{{ error }}</p>
                 {% endfor %}
             </div>
             <div class="mb-3">
                 <label for="id_password2" class="form-label">Confirm Password </label>
                 <input type="password" name="password2" id="id_password2" class="form-control">
                 {% for error in form.password2.errors %}
-                <!--TODO: remove inline style to text-danger from bootstrap -->
-                <p style="color: red">{{ error }}</p>
+                <p class="error-color">{{ error }}</p>
                 {% endfor %}
             </div>
         </div>

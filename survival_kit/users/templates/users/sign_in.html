@@ -9,16 +9,14 @@
                 <label for="id_username" class="form-label">Email</label>
                 <input type="text" name="username" id="id_username" required class="form-control">
                 {% for error in form.name.errors %}
-                <!--TODO: remove inline style to text-danger from bootstrap -->
-                <p style="color: red">{{ error }}</p>
+                <p class="error-color">{{ error }}</p>
                 {% endfor %}
             </div>
             <div class="mb-3">
                 <label for="id_password" class="form-label">Password</label>
                 <input type="password" name="password" id="id_password" required class="form-control">
                 {% for error in form.password.errors %}
-                <!--TODO: remove inline style to text-danger from bootstrap -->
-                <p style="color: red">{{ error }}</p>
+                <p class="error-color">{{ error }}</p>
                 {% endfor %}
             </div>
         </div>

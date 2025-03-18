@@ -1,23 +1,21 @@
-# TODO: remove unised imports
 import json
 
-from django.core.paginator import Paginator
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, get_object_or_404
+from django.urls import reverse_lazy
 from django.views import View
 from django.http import JsonResponse
+from django.views.generic import DetailView, CreateView
 
-from shop.forms import ProductCreateForm, ProductForm
+from shop.forms import ProductCreateForm
 from shop.models import Product, Category, Brand, CartItem
-from shop.services import *
 from shop.services.shopping_cart import CartService
-from django.db.models import Q
+from shop.services.product_service import ProductService
 
 
 class ShopBasePageView(View):
     template_name = 'base.html'
 
     def get(self, request):
-
         return render(request, self.template_name)
 
 
@@ -25,18 +23,7 @@ class ProductPageView(View):
     model = Product
     template_name = 'shop/product_page.html'
     context_object_name = 'products'
-
-    def get_queryset(self, request):
-        # TODO: move it to a service or util to reuse as this code used in another view
-        queryset = Product.objects.all()
-        if request.GET.getlist('category'):
-            queryset = queryset.filter(category__slug__in=request.GET.getlist('category'))
-        if request.GET.get('brand'):
-            queryset = queryset.filter(brand__slug__in=request.GET.getlist('brand'))
-        if request.GET.get('search'):
-            queryset = queryset.filter(name__icontains=request.GET.get('search'))
-
-        return queryset
+    filtered_products = ProductService()
 
     def get(self, request):
         categories = Category.objects.all()
@@ -47,7 +34,7 @@ class ProductPageView(View):
             request,
             self.template_name,
             {
-                self.context_object_name: self.get_queryset(request),
+                self.context_object_name: self.filtered_products.get_filtered_products(request),
                 'categories': categories,
                 'brands': brands,
                 'active_categories': active_categories,
@@ -57,27 +44,16 @@ class ProductPageView(View):
 
 
 class ProductListView(View):
-    # TODO: try to change this View class to Detail view or something to remove this get method
     model = Product
     template_name = 'shop/includes/product_list.html'
     context_object_name = 'products'
-
-    def get_queryset(self, request):
-        queryset = Product.objects.all()
-        if request.GET.getlist('category'):
-            queryset = queryset.filter(category__slug__in=request.GET.getlist('category'))
-        if request.GET.get('brand'):
-            queryset = queryset.filter(brand__slug__in=request.GET.getlist('brand'))
-        if request.GET.get('search'):
-            queryset = queryset.filter(name__icontains=request.GET.get('search'))
-        return queryset
-
+    filtered_products = ProductService()
     def get(self, request):
 
         return render(
             request,
             self.template_name,
-            {self.context_object_name: self.get_queryset(request)}
+            {self.context_object_name: self.filtered_products.get_filtered_products(request)}
         )
 
 
@@ -92,14 +68,13 @@ class CartView(View):
         return queryset
 
     def get(self, request):
-        # TODO: rename this variable to a better one
-        services1 = CartService(request.user)
+        cart_service = CartService(request.user)
         return render(
             request,
             self.template_name,
             {
                 self.context_object_name: self.get_queryset(request),
-                'total_price': services1.get_total_price(),
+                'total_price': cart_service.get_total_price()
             }
         )
 
@@ -108,13 +83,10 @@ class CartView(View):
         product_id = data.get('product_id')
         quantity = int(data.get('quantity', 0))
         product = get_object_or_404(Product, id=product_id)
-        # TODO: print
-        print(product)
         cart_item, created = CartItem.objects.get_or_create(user=request.user, product=product)
         new_quantity = cart_item.quantity + quantity
         price_by_quantity = cart_item.product.price * new_quantity
-        # TODO: rename this variable to a better one
-        services1 = CartService(request.user)
+        cart_service = CartService(request.user)
 
         if new_quantity == 0:
             cart_item.delete()
@@ -129,114 +101,20 @@ class CartView(View):
                 'status': 'success',
                 'queryset_isempty': queryset_isempty,
                 'price_by_quantity': price_by_quantity,
-                'total_price': services1.get_total_price(),
+                'total_price': cart_service.get_total_price(),
             },
             status=200
         )
-# TODO: remove empty lines
 
 
-
-class ProductCreateView(View):
-    # TODO: this can be a FormView instead of View
-    model = Product
+class ProductCreateView(CreateView):
+    form_class = ProductCreateForm
     template_name = 'shop/product_create.html'
-    form_class = ProductCreateForm
-    context_object_name = 'new_product'
-
-    def get(self, request):
-
-        return render(
-            request,
-            self.template_name,
-            {
-                'form': self.form_class,
-            }
-        )
-
-    def post(self, request):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            form.save()
-
-        return render(
-            request,
-            self.template_name,
-            {
-                'form': form,
-
-            }
-        )
+    success_url = reverse_lazy('shop:product_page')
 
 
-class ImproveView(View):
-    # TODO: Remove this view and url if it's not needed
+class ProductDetailView(DetailView):
     model = Product
-    template_name = 'shop/improve.html'
-    content_object_name = 'products'
-    form_class = ProductCreateForm
-
-    paginator = Paginator(model.objects.all(), 1)
-
-    def get(self, request):
-        # TODO: WTF
-        page_number = request.GET.get('page')
-        page_object = self.paginator.get_page(page_number)
-
-
-        return render(
-            request,
-            self.template_name,
-            {
-                self.content_object_name: self.model.objects.all(),
-                'form': self.form_class,
-                'page_object': page_object,
-            }
-        )
-
-    def post(self, request):
-        # TODO: WTF
-        return render(
-            request,
-            self.template_name,
-            {
-                'form': self.form_class,
-            }
-        )
-
-def search(request):
-    # TODO: if you need it, change it to class, if no remove, and fix empty lines above
-    if request.method == "POST":
-        searched = request.POST.get('searched')
-        outputt = Product.objects.filter(Q(name__icontains=searched) | Q(description__icontains=searched))
-
-        return render(
-            request,
-            "shop/search.html",
-
-            {
-                'searched': searched,
-                'filtresult': outputt
-            }
-        )
-
-    else:
-        return render(
-            request,
-            "shop/search.html",
-            {}
-        )
-
-
-class ProductDetailView(View):
-    # TODO: Try to change it to Detail view or something like that, to remove get method
-    def get(self, request, product_slug):
-        product = get_object_or_404(Product, slug=product_slug)
-
-        return render(
-            request,
-            'shop/product_detail.html', # TODO: move it no template variable
-            {
-                'product': product,
-            }
-        )
+    templa_name = 'shop/product_detail.html'
+    slug_url_kwarg = 'product_slug'
+    context_object_name = 'product'

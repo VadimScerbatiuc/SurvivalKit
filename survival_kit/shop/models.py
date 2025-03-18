@@ -1,8 +1,5 @@
-# TODO: remove unused imports
 from autoslug import AutoSlugField
-from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import Sum
 from django.urls import reverse
 
 from users.models import UserAccount

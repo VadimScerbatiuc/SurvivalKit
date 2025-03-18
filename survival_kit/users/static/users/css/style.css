@@ -1,0 +1,7 @@
+:root {
+  --error_color: #FF0000;
+}
+
+.error-color {
+    color: var(--error_color);
+}
