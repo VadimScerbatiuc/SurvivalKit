@@ -2,18 +2,18 @@
     --link-color: #cf8d13
 }
 
-@media (min-width: 800px) {
-    .container {
-        width: 800px;
-    }
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
+
 
 .order-window {
     color : #797a82;
     width: 300px;
     height: 250px;
     background-color: #f7f7ed
-
 }
 
 .terms-link:link {
