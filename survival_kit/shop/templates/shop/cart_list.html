@@ -64,6 +64,7 @@
 {% endblock %}
 
 {% block js %}
+    <script src="https://js.stripe.com/v3/"></script>
     <script>
         window.cartViewUrl = "{% url 'shop:cart_view' %}";
         window.csrftoken = '{{ csrf_token }}';

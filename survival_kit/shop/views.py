@@ -1,15 +1,19 @@
 import json
 
-from django.shortcuts import render, get_object_or_404
+import stripe
+from django.conf import settings
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.http import JsonResponse
-from django.views.generic import DetailView, CreateView
+from django.views.generic import DetailView, CreateView, TemplateView
 
 from shop.forms import ProductCreateForm
 from shop.models import Product, Category, Brand, CartItem
 from shop.services.shopping_cart import CartService
 from shop.services.product_service import ProductService
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 class ShopBasePageView(View):
@@ -118,3 +122,34 @@ class ProductDetailView(DetailView):
     templa_name = 'shop/product_detail.html'
     slug_url_kwarg = 'product_slug'
     context_object_name = 'product'
+
+
+class CreateCheckoutSessionView(View):
+    def post(self, request, *args, **kwargs):
+        YOUR_DOMAIN = "http://127.0.0.1:8000/"
+        checkout_session = stripe.checkout.Session.create(
+            line_items=[
+                {
+                    # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+                    'price_data': {
+                        'currency': "USD",
+                        'product_data': {
+                            'name': "name"
+                        },
+                        'unit_amount': int(10 * 1000)
+                    },
+                    'quantity': 1,
+                },
+            ],
+            mode='payment',
+            success_url=YOUR_DOMAIN + '/success/',
+            cancel_url=YOUR_DOMAIN + '/cancel/',
+        )
+        return JsonResponse({'id': checkout_session.id})
+
+
+class SuccessView(TemplateView):
+    template_name = "shop/success.html"
+
+class CancelView(TemplateView):
+    template_name = "shop/cancel.html"
