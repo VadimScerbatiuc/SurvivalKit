@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 
-    <div class="d-flex">
-        <div class="d-flex flex-column">
+    <div class="row">
+        <div class="col-2">
             <p>Categories</p>
             {% for category in categories %}
                 <div class="form-check">
@@ -26,87 +27,17 @@
             <br>
             <input type="text" class="form-control" id="search-input" placeholder="Поиск продукт" name="search">
         </div>
-        {% include 'shop/includes/product_list.html' %}
+        <div class="col">
+            {% include 'shop/includes/product_list.html' %}
+        </div>
     </div>
 
 {% endblock%}
-<!--    TODO: Try to move this to JS files and place it in static/shop/js        -->
 {% block js %}
 <script>
-const csrftoken = '{{ csrf_token }}';
-const checkboxes_by_class = Array.from(document.getElementsByClassName('form-check-input'));
-const currentUrl = new URL(location);
-const urlProductList = "{% url 'shop:product_list' %}" // jinja to string !important
-const buttons_add_to_cart = Array.from(document.getElementsByClassName('add_to_cart'));
-
-checkboxes_by_class.forEach(async function(elem){
-    elem.addEventListener("change", async function(){
-        const name = this.name;
-        const value = this.value;
-        if(this.checked){
-            currentUrl.searchParams.append(name, value);
-        } else {
-            currentUrl.searchParams.delete(name, value);
-        }
-        // Обновляем URL и отправляем запрос
-        updateURLAndFetch();
-    });
-});
-
-// Обработчик для поля ввода поиска
-const searchInput = document.getElementById("search-input");
-searchInput.addEventListener("input", function() {
-    const searchQuery = this.value;
-
-    // Обновляем параметр поиска в URL
-    if (searchQuery) {
-        currentUrl.searchParams.set("search", searchQuery); // "search" - это параметр для поиска
-    } else {
-        currentUrl.searchParams.delete("search");
-    }
-
-    // Обновляем URL и отправляем запрос
-    updateURLAndFetch();
-});
-
-function updateURLAndFetch(){
-    history.pushState({}, "", currentUrl)
-    console.log(currentUrl)
-        fetch(urlProductList + '?' + currentUrl.searchParams.toString(), {method: "GET"})
-        .then(async (response) => {
-            const parser = new DOMParser();
-            const textData = await response.text()
-            const htmlData = parser.parseFromString(textData, "text/html");
-            //console.log(htmlData.getElementById("id_product_list"));
-            const productList = document.getElementById("id_product_list");
-            productList.replaceWith(htmlData.getElementById("id_product_list"));
-        })
-
-}
-
-buttons_add_to_cart.forEach(async function(elem){
-    elem.addEventListener("click", async function(){
-        const product_id = this.id;
-
-        fetch("{% url 'shop:cart_view' %}", {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'X-CSRFToken': csrftoken,
-            },
-            body: JSON.stringify({'product_id': product_id, 'quantity': 1})
-        })
-        .then(async response => {
-            let data = await response.json();
-            let status = await data.status;
-            if (status == 'success'){
-                toastr.success('Have fun storming the castle!', 'Miracle Max Says');
-            }
-            else{
-                toastr.error('error');
-            }
-        })
-    })
-})
+    window.shopCartViewUrl = "{% url 'shop:cart_view' %}";
+    window.csrftoken = '{{ csrf_token }}';
+    window.urlProductList = "{% url 'shop:product_list' %}" ;// jinja to string !important
 </script>
+<script src="{% static 'shop/javascript/product_page.js' %}"></script>
 {% endblock%}

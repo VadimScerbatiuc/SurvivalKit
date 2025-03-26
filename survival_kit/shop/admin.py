@@ -21,3 +21,8 @@ class Category(admin.ModelAdmin):
 @admin.register(Brand)
 class Brand(admin.ModelAdmin):
     pass
+
+
+@admin.register(PriceSetting)
+class PriceSetting(admin.ModelAdmin):
+    pass

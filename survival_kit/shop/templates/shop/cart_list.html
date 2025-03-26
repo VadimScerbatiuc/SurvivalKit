@@ -1,60 +1,67 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load shop_tags %}
 
 {% block content %}
-    <div class="justify-content-between">
-        <div class="row">
-            <div class="d-flex flex-column col">
-                <p id="empty-cart-info" class="{% if cart %}d-none{% endif %}">Your cart is empty.</p>
-                {% for item in cart %}
-                    <div class="cart-item-box d-flex" id="{{ item.product.id }}_block">
-                        <div class="me-5 cart-product-image">
-                            <img class="card-img-top card-image" {% if item.product.main_image %} src="{{ item.product.main_image.image.url }} " {% endif %} alt="Card image cap">
-                        </div>
-                        <div>
-                            <h2>{{ item.product.name }}</h2>
-                            <div class="d-flex justify-content-between">
-                                <p>Price: </p>
-                                <p id="{{ item.product_id }}_price">{{ item.price_by_quantity }}</p>
+    {% if cart %}
+        {% currency_symbol as currency_symbol %}
+        <div class="justify-content-between">
+            <div class="row">
+                <div class="d-flex flex-column col">
+                    {% for item in cart %}
+                        <div class="cart-item-box d-flex" id="{{ item.product.id }}_block">
+                            <div class="me-5 cart-product-image">
+                                <img class="card-img-top card-image" {% if item.product.main_image %} src="{{ item.product.main_image.image.url }} " {% endif %} alt="Card image cap">
                             </div>
-                            <!-- add/remove button -->
-                            <div class="d-inline-flex border rounded-5 align-item-center ">
-                                <button class="btn remove_from_cart_one" id="{{ item.product.id }}">{% if item.quantity == 1 %}<i class="fa-solid fa-trash"></i>{% else %}<i class="fa-solid fa-minus"></i>{% endif %}</button>
-                                <h3 id="{{ item.product.id }}_quantity" class="m-0">{{ item.quantity }}</h3>
-                                <button class="btn add_to_cart_one" id="{{ item.product.id }}"><i class="fa-solid fa-plus"></i></button>
+                            <div>
+                                <h2>{{ item.product.name }}</h2>
+                                <div class="d-flex justify-content-between">
+                                    <p>Price: </p>
+                                    <p id="{{ item.product_id }}_price">{{ item.price_by_quantity }} {{ currency_symbol }}</p>
+                                </div>
+                                <!-- add/remove button -->
+                                <div class="d-inline-flex border rounded-5 align-item-center ">
+                                    <button class="btn remove_from_cart_one" id="{{ item.product.id }}">{% if item.quantity == 1 %}<i class="fa-solid fa-trash"></i>{% else %}<i class="fa-solid fa-minus"></i>{% endif %}</button>
+                                    <h3 id="{{ item.product.id }}_quantity" class="m-0">{{ item.quantity }}</h3>
+                                    <button class="btn add_to_cart_one" id="{{ item.product.id }}"><i class="fa-solid fa-plus"></i></button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                {% endfor %}
-            </div>
+                    {% endfor %}
+                </div>
 
-            <div class="border border-secondary border-2 order-window col">
-                <h5 class="d-flex justify-content-center">ORDER SUMMARY</h5>
-                <div class="d-flex flex-column margin-order">
-                    <div class="d-flex justify-content-center justify-content-between">
-                        <p>Subtotal</p>
-                        <p>{{ total_price }} MDL</p>
+                <div class="border border-secondary border-2 order-window col">
+                    <h5 class="d-flex justify-content-center">ORDER SUMMARY</h5>
+                    <div class="d-flex flex-column margin-order">
+                        <div class="d-flex justify-content-center justify-content-between">
+                            <p>Subtotal</p>
+                            <p>{{ total_price }} {{ currency_symbol }}</p>
+                        </div>
+                        <div class="d-flex justify-content-center justify-content-between">
+                            <p>Shipping</p>
+                            <p>0 {{ currency_symbol }}</p>
+                        </div>
                     </div>
-                    <div class="d-flex justify-content-center justify-content-between">
-                        <p>Shipping</p>
-                        <p>0 MDL</p>
+                    <div class="d-flex text-end margin-order">
+                        <h5 class="col">Total: </h5>
+                        <h5 class="col" id="total-price">{{ total_price }} {{ currency_symbol }}</h5>
                     </div>
-                </div>
-                <div class="d-flex text-end margin-order">
-                    <h5 class="col">Total: </h5>
-                    <h5 class="col" id="total-price">{{ total_price }}</h5>
-                </div>
-                <div class="d-flex justify-content-center">
-                    <button class="button-order">Continue & Play </button>
-                </div>
-                <div class="d-flex justify-content-center margin-order ">
-                    <p>By confirming your order, you agree to <a href="#" class="terms-link">The Terms & Conditions</a></p>
+                    <div class="d-flex justify-content-center">
+                        <button class="button-order">Continue & Play </button>
+                    </div>
+                    <div class="d-flex justify-content-center margin-order ">
+                        <p>By confirming your order, you agree to <a href="#" class="terms-link">The Terms & Conditions</a></p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+
+    {% else %}
+        <div class="d-flex justify-content-center align-item-center h-100">
+            <span class="h3">There are no results to display</span>
+        </div>
+    {% endif %}
 {% endblock %}
-<!--    TODO: Try to move this to JS files and place it in static/shop/js        -->
 
 {% block js %}
     <script>
