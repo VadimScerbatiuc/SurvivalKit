@@ -13,8 +13,6 @@ from shop.models import Product, Category, Brand, CartItem
 from shop.services.shopping_cart import CartService
 from shop.services.product_service import ProductService
 
-stripe.api_key = settings.STRIPE_SECRET_KEY
-
 
 class ShopBasePageView(View):
     template_name = 'base.html'
@@ -127,25 +125,29 @@ class ProductDetailView(DetailView):
 class CreateCheckoutSessionView(View):
     def post(self, request, *args, **kwargs):
         YOUR_DOMAIN = "http://127.0.0.1:8000/"
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        product_slug = self.kwargs["product_slug"]
+        product = Product.objects.get(slug=product_slug)
         checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
             line_items=[
                 {
-                    # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
                     'price_data': {
                         'currency': "USD",
                         'product_data': {
-                            'name': "name"
+                            'name': product.name
                         },
-                        'unit_amount': int(10 * 1000)
+                        'unit_amount': int(product.price * 100)
                     },
                     'quantity': 1,
                 },
             ],
             mode='payment',
-            success_url=YOUR_DOMAIN + '/success/',
-            cancel_url=YOUR_DOMAIN + '/cancel/',
+            success_url=YOUR_DOMAIN + 'success/',
+            cancel_url=YOUR_DOMAIN + 'cancel/',
         )
-        return JsonResponse({'id': checkout_session.id})
+
+        return redirect(checkout_session.url, code=303)
 
 
 class SuccessView(TemplateView):
