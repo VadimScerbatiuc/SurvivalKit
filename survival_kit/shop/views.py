@@ -12,6 +12,7 @@ from shop.forms import ProductCreateForm
 from shop.models import Product, Category, Brand, CartItem
 from shop.services.shopping_cart import CartService
 from shop.services.product_service import ProductService
+from shop.services.payment_service import PaymentService
 
 
 class ShopBasePageView(View):
@@ -123,28 +124,17 @@ class ProductDetailView(DetailView):
 
 
 class CreateCheckoutSessionView(View):
-    def post(self, request, *args, **kwargs):
-        YOUR_DOMAIN = "http://127.0.0.1:8000/"
+    def post(self, request):
+        success_url = request.build_absolute_uri(reverse_lazy('shop:success-payment'))
+        cancel_url = request.build_absolute_uri(reverse_lazy('shop:cancel-payment'))
+        payment_service = PaymentService(request.user)
         stripe.api_key = settings.STRIPE_SECRET_KEY
-        product_slug = self.kwargs["product_slug"]
-        product = Product.objects.get(slug=product_slug)
         checkout_session = stripe.checkout.Session.create(
-            payment_method_types=['card'],
-            line_items=[
-                {
-                    'price_data': {
-                        'currency': "USD",
-                        'product_data': {
-                            'name': product.name
-                        },
-                        'unit_amount': int(product.price * 100)
-                    },
-                    'quantity': 1,
-                },
-            ],
-            mode='payment',
-            success_url=YOUR_DOMAIN + 'success/',
-            cancel_url=YOUR_DOMAIN + 'cancel/',
+            payment_method_types = ['card'],
+            line_items = payment_service.get_products_data_for_stripe(),
+            mode = 'payment',
+            success_url = success_url,
+            cancel_url = cancel_url,
         )
 
         return redirect(checkout_session.url, code=303)

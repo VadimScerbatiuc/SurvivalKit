@@ -12,8 +12,8 @@ urlpatterns = [
     path('cart/', CartView.as_view(), name='cart_view'),
     path('product-create/', ProductCreateView.as_view(), name="product_create"),
     path('product-detail/<slug:product_slug>/', ProductDetailView.as_view(), name='product_detail'),
-    path('create-checkout-session/<slug:product_slug>/', CreateCheckoutSessionView.as_view(), name="create-checkout-session"),
-    path('success/', SuccessView.as_view, name="success-payment"),
-    path('cansel/', CancelView.as_view, name="cancel-payment"),
+    path('create-checkout-session/', CreateCheckoutSessionView.as_view(), name="create-checkout-session"),
+    path('success/', SuccessView.as_view(), name="success-payment"),
+    path('cansel/', CancelView.as_view(), name="cancel-payment"),
 
 ]
