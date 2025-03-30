@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <form action="{% url 'shop:product_create' %}" method="post">
+    <form action="{% url 'shop:product:product_create' %}" method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Add</button>
