@@ -37,7 +37,7 @@
 <script>
     window.shopCartViewUrl = "{% url 'shop:cart_view' %}";
     window.csrftoken = '{{ csrf_token }}';
-    window.urlProductList = "{% url 'shop:product_list' %}" ;// jinja to string !important
+    window.urlProductList = "{% url 'shop:product:product_list' %}";
 </script>
 <script src="{% static 'shop/javascript/product_page.js' %}"></script>
 {% endblock%}

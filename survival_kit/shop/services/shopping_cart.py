@@ -12,3 +12,4 @@ class CartService:
             total_price += cart_item.price_by_quantity
 
         return total_price
+

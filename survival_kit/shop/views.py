@@ -1,15 +1,18 @@
 import json
 
-from django.shortcuts import render, get_object_or_404
-from django.urls import reverse_lazy
+import stripe
+from django.conf import settings
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.http import JsonResponse
-from django.views.generic import DetailView, CreateView
+from django.views.generic import DetailView, CreateView, TemplateView
 
 from shop.forms import ProductCreateForm
 from shop.models import Product, Category, Brand, CartItem
 from shop.services.shopping_cart import CartService
 from shop.services.product_service import ProductService
+from shop.services.payment_service import PaymentService
 
 
 class ShopBasePageView(View):
@@ -118,3 +121,23 @@ class ProductDetailView(DetailView):
     templa_name = 'shop/product_detail.html'
     slug_url_kwarg = 'product_slug'
     context_object_name = 'product'
+
+
+class CreateCheckoutSessionView(View):
+    def post(self, request):
+        success_url = request.build_absolute_uri(reverse('shop:success-payment'))
+        cancel_url = request.build_absolute_uri(reverse('shop:product:product_page'))
+        payment_service = PaymentService(request.user)
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=payment_service.get_products_data_for_stripe(),
+            mode='payment',
+            success_url=success_url,
+            cancel_url=cancel_url,
+        )
+        return redirect(checkout_session.url, code=303)
+
+
+class SuccessView(TemplateView):
+    template_name = "shop/success.html"
