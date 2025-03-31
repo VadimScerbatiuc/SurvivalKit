@@ -26,3 +26,7 @@ class Brand(admin.ModelAdmin):
 @admin.register(PriceSetting)
 class PriceSetting(admin.ModelAdmin):
     pass
+
+@admin.register(CartItem)
+class CartItem(admin.ModelAdmin):
+    pass

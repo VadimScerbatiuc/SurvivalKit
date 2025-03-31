@@ -113,7 +113,7 @@ class CartView(View):
 class ProductCreateView(CreateView):
     form_class = ProductCreateForm
     template_name = 'shop/product_create.html'
-    success_url = reverse_lazy('shop:product_page')
+    success_url = reverse_lazy('shop:product:page')
 
 
 class ProductDetailView(DetailView):
@@ -125,8 +125,8 @@ class ProductDetailView(DetailView):
 
 class CreateCheckoutSessionView(View):
     def post(self, request):
-        success_url = request.build_absolute_uri(reverse('shop:success-payment'))
-        cancel_url = request.build_absolute_uri(reverse('shop:product:product_page'))
+        success_url = request.build_absolute_uri(reverse('shop:stripe:success-payment'))
+        cancel_url = request.build_absolute_uri(reverse('shop:product:create'))
         payment_service = PaymentService(request.user)
         stripe.api_key = settings.STRIPE_SECRET_KEY
         checkout_session = stripe.checkout.Session.create(
