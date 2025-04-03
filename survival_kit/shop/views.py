@@ -1,11 +1,13 @@
 import json
-
 import stripe
+
 from django.conf import settings
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views import View
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, CreateView, TemplateView
 
 from shop.forms import ProductCreateForm
@@ -125,7 +127,7 @@ class ProductDetailView(DetailView):
 
 class CreateCheckoutSessionView(View):
     def post(self, request):
-        success_url = request.build_absolute_uri(reverse('shop:stripe:success-payment'))
+        success_url = request.build_absolute_uri(reverse('shop:stripe:webhook'))
         cancel_url = request.build_absolute_uri(reverse('shop:product:create'))
         payment_service = PaymentService(request.user)
         stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -141,3 +143,30 @@ class CreateCheckoutSessionView(View):
 
 class SuccessView(TemplateView):
     template_name = "shop/success.html"
+
+
+@csrf_exempt
+def my_webhook_view(request):
+    payload = request.body
+    sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
+    endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
+    event = None
+    try:
+        event = stripe.Webhook.construct_event(
+        payload, sig_header, endpoint_secret
+    )
+    except ValueError as e:
+    # Invalid payload
+        return HttpResponse(status=400)
+    except stripe.error.SignatureVerificationError as e:
+    # Invalid signature
+        return HttpResponse(status=400)
+
+    if (
+        event['type'] == 'checkout.session.completed'
+        or event['type'] == 'checkout.session.async_payment_succeeded'
+    ):
+        session = event['data']['object']
+        print(session)
+
+    return HttpResponse(status=200)

@@ -25,8 +25,8 @@ SECRET_KEY = 'django-insecure-m*)ijgazmbr_-6uzw$q!t_ume9^xmj8t!rj+(8&m*pwz((_^+z
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ["127.0.0.1", "9704-95-65-107-54.ngrok-free.app"]
+CSRF_TRUSTED_ORIGINS = ["https://9704-95-65-107-54.ngrok-free.app"]
 
 # Application definition
 
@@ -135,4 +135,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STRIPE_PUBLIC_KEY = config('STRIPE_TEST_PUBLIC_KEY')
 STRIPE_SECRET_KEY = config('STRIPE_TEST_SECRET_KEY')
-STRIPE_WEBHOOK_SECRET = ""
+STRIPE_WEBHOOK_SECRET = config('STRIPE_TEST_WEBHOOK_SECRET')
