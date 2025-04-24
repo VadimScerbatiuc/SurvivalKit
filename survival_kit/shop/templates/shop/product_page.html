@@ -3,8 +3,8 @@
 
 {% block content %}
 
-    <div class="row">
-        <div class="col-2">
+    <div class="row ">
+        <div class="col-2 filter-box border-end p-3">
             <p>Categories</p>
             {% for category in categories %}
                 <div class="form-check">
@@ -25,7 +25,7 @@
                 </div>
             {% endfor %}
             <br>
-            <input type="text" class="form-control" id="search-input" placeholder="Поиск продукт" name="search">
+            <input type="text" class="form-control" id="search-input" placeholder="Поиск..." name="search">
         </div>
         <div class="col">
             {% include 'shop/includes/product_list.html' %}
