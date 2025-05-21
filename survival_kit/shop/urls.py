@@ -6,7 +6,6 @@ from .views import *
 app_name = 'shop'
 
 product_urls = [
-    path('page/', ProductPageView.as_view(), name='page'),
     path('list/', ProductListView.as_view(), name='list'),
     path('create/', ProductCreateView.as_view(), name='create'),
     path('detail/<slug:product_slug>/', ProductDetailView.as_view(), name='detail'),
@@ -19,7 +18,7 @@ stripe_urls = [
 ]
 
 urlpatterns = [
-    path('', ShopBasePageView.as_view(), name='main_page'),
+    path('', ProductPageView.as_view(), name='main_page'),
     path('cart/', CartView.as_view(), name='cart'),
     path('product/', include((product_urls, 'product'))),
     path('stripe/', include((stripe_urls, 'stripe'))),

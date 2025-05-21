@@ -10,15 +10,14 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="{% url 'shop:main_page' %}">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'shop:product:page' %}">Shop</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'shop:cart' %}">My Cart</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'shop:product:create' %}">Create Product</a>
-                </li>
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'shop:cart' %}">My Cart</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'shop:product:create' %}">Create Product</a>
+                    </li>
+                {% endif %}
             </ul>
                 <div class="d-flex align-items-center">
                     {% if request.user.is_authenticated %}

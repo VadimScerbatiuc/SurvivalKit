@@ -91,3 +91,20 @@ body {
 }
 
 
+#grid1 {
+    background-color: blue;
+    display: grid;
+    grid-column-gap: 20px;
+    grid-row-gap: 10px;
+    grid-template-columns: 200px 200px auto
+}
+
+.grid-item {
+    background-color: red;
+    padding: 10px;
+}
+
+.e6 {
+    grid-column: 3;
+    grid-row: 2 / 4;
+}
