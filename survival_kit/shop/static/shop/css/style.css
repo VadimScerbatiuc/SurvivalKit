@@ -68,13 +68,13 @@ body {
 
 .cart-product-image{
     height: 200px;
-    max-width:200px;
-    min-width:200px;
+    max-width: 100px;
+    min-width: 100px;
 }
 
 /* card */
 .card-img-top {
-	height: 150px;
+	height: 200px;
 }
 
 .card-description {
@@ -90,7 +90,7 @@ body {
     height: 100%;
 }
 
-
+/* grids learn */
 #grid1 {
     background-color: blue;
     display: grid;
