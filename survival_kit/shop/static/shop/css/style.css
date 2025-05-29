@@ -77,10 +77,16 @@ body {
 	height: 200px;
 }
 
+.card-element {
+    max-width: 200px;
+    min-width: 200px;
+}
+
+
 .card-description {
 	overflow: hidden;
 	-webkit-box-orient: vertical;
-	-webkit-line-clamp: 6;
+	-webkit-line-clamp: 1;
 	display: -webkit-box;
 }
 
