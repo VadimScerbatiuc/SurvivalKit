@@ -13,9 +13,12 @@ body {
 
 .order-window {
     color : #797a82;
-    width: 300px;
-    height: 250px;
-    background-color: #f7f7ed
+    min-width: 210px;
+}
+
+.card_order_window_img {
+    max-height: 30px;
+
 }
 
 .terms-link:link {
@@ -37,10 +40,6 @@ body {
 .terms-link:active {
     text-decoration: none;
     color: var(--link-color);
-}
-
-.margin-order {
-    margin: 0 20px 0 20px
 }
 
 .button-order {

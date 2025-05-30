@@ -146,8 +146,12 @@ cython_debug/
 node_modules
 /dist
 
-media
-images/
+/media/*
+media/*
+!/media/card_security_certification_images/
+!/media/card_security_certification_images/**
+!/media/payment_method_images/
+!/media/payment_method_images/**
 
 # local env files
 .env.local
