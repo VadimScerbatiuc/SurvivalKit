@@ -2,6 +2,7 @@ import json
 
 import stripe
 from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views import View
@@ -60,7 +61,7 @@ class ProductListView(View):
         )
 
 
-class CartView(View):
+class CartView(LoginRequiredMixin, View):
     model = CartItem
     template_name = 'shop/cart_list.html'
     context_object_name = 'cart'
@@ -110,7 +111,7 @@ class CartView(View):
         )
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     form_class = ProductCreateForm
     template_name = 'shop/product_create.html'
     success_url = reverse_lazy('shop:product_page')
@@ -123,7 +124,7 @@ class ProductDetailView(DetailView):
     context_object_name = 'product'
 
 
-class CreateCheckoutSessionView(View):
+class CreateCheckoutSessionView(LoginRequiredMixin, View):
     def post(self, request):
         success_url = request.build_absolute_uri(reverse('shop:success-payment'))
         cancel_url = request.build_absolute_uri(reverse('shop:product:product_page'))
@@ -139,5 +140,5 @@ class CreateCheckoutSessionView(View):
         return redirect(checkout_session.url, code=303)
 
 
-class SuccessView(TemplateView):
+class SuccessView(LoginRequiredMixin, TemplateView):
     template_name = "shop/success.html"

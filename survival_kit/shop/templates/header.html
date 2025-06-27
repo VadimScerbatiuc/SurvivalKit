@@ -13,12 +13,14 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'shop:product:product_page' %}">Shop</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'shop:cart_view' %}">My Cart</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'shop:product:product_create' %}">Create Product</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'shop:cart_view' %}">My Cart</a>
+                    </li>
+                {% if request.user.is_product_manager %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'shop:product:product_create' %}">Create Product</a>
+                    </li>
+                {% endif %}
             </ul>
                 <div class="d-flex align-items-center">
                     {% if request.user.is_authenticated %}
