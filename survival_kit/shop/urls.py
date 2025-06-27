@@ -32,5 +32,4 @@ urlpatterns = [
     path('cart/', CartView.as_view(), name='cart_view'),
     path('create-checkout-session/', CreateCheckoutSessionView.as_view(), name="create-checkout-session"),
     path('success/', SuccessView.as_view(), name="success-payment"),
-
 ]

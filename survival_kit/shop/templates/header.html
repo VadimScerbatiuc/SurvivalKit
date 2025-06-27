@@ -21,6 +21,11 @@
                         <a class="nav-link" href="{% url 'shop:product:product_create' %}">Create Product</a>
                     </li>
                 {% endif %}
+                {% if request.user.is_superuser %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'users:management' %}">Manage users</a>
+                    </li>
+                {% endif %}
             </ul>
                 <div class="d-flex align-items-center">
                     {% if request.user.is_authenticated %}

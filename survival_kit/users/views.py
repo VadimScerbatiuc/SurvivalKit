@@ -1,11 +1,13 @@
 from django.contrib.auth import logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView
 
 from users.forms import SignUpForm, SignInForm
+from .models import UserAccount
 
 
 class SignUpView(CreateView):
@@ -26,3 +28,17 @@ class SignOutView(View):
     def get(self, request):
         logout(request)
         return redirect('users:sign_in')
+
+
+class ManagementPageView(LoginRequiredMixin, View):
+    all_users = UserAccount.objects.all()
+    template_name = "users/management_page.html"
+
+    def get(self, request):
+        return render(
+            request,
+            self.template_name,
+            {
+                "all_users": self.all_users,
+            }
+        )

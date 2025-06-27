@@ -135,8 +135,8 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# STRIPE_PUBLIC_KEY = "" #config('STRIPE_TEST_PUBLIC_KEY')
-# STRIPE_SECRET_KEY = "" #config('STRIPE_TEST_SECRET_KEY')
-# STRIPE_WEBHOOK_SECRET = ""
+STRIPE_PUBLIC_KEY = "" #config('STRIPE_TEST_PUBLIC_KEY')
+STRIPE_SECRET_KEY = "" #config('STRIPE_TEST_SECRET_KEY')
+STRIPE_WEBHOOK_SECRET = ""
 
 LOGIN_URL = reverse_lazy('users:sign_in')
