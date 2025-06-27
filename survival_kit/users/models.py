@@ -23,6 +23,10 @@ class UserManager(BaseUserManager):
 
 
 class UserAccount(PermissionsMixin, AbstractBaseUser):
+    ROLE_CHOICES = [
+        ('product_manager', 'Producr Manager'),
+        ('buyer', 'Buyer'),
+    ]
     email = models.EmailField(verbose_name="Email", max_length=128, unique=True)
     first_name = models.CharField(
         verbose_name="First name",
@@ -37,7 +41,15 @@ class UserAccount(PermissionsMixin, AbstractBaseUser):
         null=True
     )
     is_staff = models.BooleanField(default=False,)
+    role = models.CharField(max_length=32, choices=ROLE_CHOICES, default='buyer')
 
     objects = UserManager()
 
     USERNAME_FIELD = "email"
+
+    @property
+    def is_product_manager(self):
+        if not self.is_authenticated:
+            return False
+
+        return self.role == 'product_manager' or self.is_superuser

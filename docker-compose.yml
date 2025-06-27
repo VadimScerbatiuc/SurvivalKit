@@ -7,7 +7,7 @@ services:
       - 8000:8000
     image: app:django
     container_name: django_container
-    command: python3 survival_kit/manage.py runserver 0.0.0.0:8000
+    command: sh -c "python survival_kit/manage.py migrate && python survival_kit/manage.py runserver 0.0.0.0:8000"
     environment:
       - SQL_DATABASE=postgres
       - SQL_USER=postgres
