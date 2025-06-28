@@ -114,7 +114,7 @@ class CartView(LoginRequiredMixin, View):
 class ProductCreateView(LoginRequiredMixin, CreateView):
     form_class = ProductCreateForm
     template_name = 'shop/product_create.html'
-    success_url = reverse_lazy('shop:product_page')
+    success_url = reverse_lazy('shop:product:product_page')
 
 
 class ProductDetailView(DetailView):
