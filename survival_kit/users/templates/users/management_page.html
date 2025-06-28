@@ -16,9 +16,49 @@
         <th scope="row">{{ user.first_name }}</th>
         <td>{{ user.last_name }}</td>
         <td>{{ user.email }}</td>
-        <td>{{ user.role }}</td>
+        <td>
+          <select class="form-select" onchange="updateUserRole({{ user.id }}, this.value)">
+            {% for value, label in user.ROLE_CHOICES %}
+              <option value="{{ value }}" {% if user.role == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </td>
       </tr>
     {% endfor %}
   </tbody>
 </table>
+{% endblock %}
+
+{% block js %}
+<script>
+    const userManagementPageUrl = "{% url 'users:management' %}";
+    const csrftoken = '{{ csrf_token }}';
+
+    async function updateUserRole(userId, newRole){
+            let data = await makeRequest(userManagementPageUrl, method='POST', body={'user_id': userId, 'role': newRole});
+    }
+
+    async function makeRequest(url, method, body) {
+        let headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+        }
+
+        return fetch(url, {
+            method: method,
+            headers: headers,
+            body: JSON.stringify(body)
+        })
+        .then(async response => {
+              let data = await response.json();
+              let status = await data.status;
+              if (status === "success") {
+                toastr.success("Роль успешно обновлена", "Успешно");
+              } else {
+                toastr.error("Ошибка при обновлении роли", "Ошибка");
+              }
+        })
+    }
+</script>
 {% endblock %}
