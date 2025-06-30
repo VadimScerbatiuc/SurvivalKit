@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <form action="{% url 'shop:product:product_create' %}" method="post">
+    <p class="h2">Product create page</p>
+    <form action="{% url 'shop:product:product_create' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="mb-3">
-                <label for="id_name" class="form-label">Email</label>
+                <label for="id_name" class="form-label">Product Name</label>
                 <input type="text" name="name" id="id_name" required class="form-control">
                 {% for error in form.name.errors %}
                 <p class="error-color">{{ error }}</p>
@@ -50,7 +51,24 @@
                 <p class="error-color">{{ error }}</p>
                 {% endfor %}
         </div>
-
+        <div class="mb-3">
+            <label for="id_stock" class="form-label">Stock</label>
+            <input type="number" name="stock" id="id_stock" class="form-control" value="{{ form.stock.value|default:0 }}">
+            {% for error in form.stock.errors %}
+                <p class="error-color">{{ error }}</p>
+            {% endfor %}
+        </div>
+        <div class="mb-3">
+            <input type="checkbox" name="is_active" id="id_is_active" class="form-check-input" checked>
+            <label for="id_is_active" class="form-check-label">Is Active</label>
+            {% for error in form.is_active.errors %}
+                <p class="error-color">{{ error }}</p>
+            {% endfor %}
+        </div>
+        <div class="mb-3">
+            <label for="id_image" class="form-label">Upload Photo</label>
+            <input type="file" name="image" id="id_image" class="form-control">
+        </div>
         <button type="submit" class="btn btn-primary">Add</button>
     </form>
 {% endblock %}

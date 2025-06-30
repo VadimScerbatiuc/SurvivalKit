@@ -21,7 +21,8 @@
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <p>Total price: </p>
-                                    <p id="{{ item.product_id }}_price">{{ item.price_by_quantity }} {{ currency_symbol }}</p>
+                                    <p id="{{ item.product_id }}_price">{{ item.price_by_quantity }}</p>
+                                    <p>{{ currency_symbol }}</p>
                                 </div>
                                 <!-- add/remove button -->
                                 <div class="d-inline-flex border rounded-5 align-item-center ">
@@ -38,7 +39,8 @@
                     <h5 class="d-flex justify-content-center">ORDER SUMMARY</h5>
                     <div class="d-flex text-end margin-order">
                         <h5 class="col">Total: </h5>
-                        <h5 class="col" id="total-price">{{ total_price }} {{ currency_symbol }}</h5>
+                        <h5 class="col" id="total-price">{{ total_price }}</h5>
+                        <p>{{ currency_symbol }}</p>
                     </div>
                     <div class="d-flex justify-content-center">
                         <form action="{% url 'shop:create-checkout-session' %}" method="post">

@@ -16,12 +16,6 @@ from shop.services.product_service import ProductService
 from shop.services.payment_service import PaymentService
 
 
-class ShopBasePageView(View):
-    template_name = 'base.html'
-
-    def get(self, request):
-        return render(request, self.template_name)
-
 
 class ProductPageView(View):
     model = Product
