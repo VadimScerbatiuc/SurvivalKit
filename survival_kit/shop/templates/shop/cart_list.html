@@ -7,7 +7,7 @@
         {% currency_symbol as currency_symbol %}
         <div class="justify-content-between">
             <div class="row">
-                <div class="d-flex flex-column col">
+                <div class="d-flex flex-column col-sm-12 col-md-8">
                     {% for item in cart %}
                         <div class="cart-item-box d-flex" id="{{ item.product.id }}_block">
                             <div class="me-2 cart-product-image">
@@ -35,11 +35,11 @@
                     {% endfor %}
                 </div>
 
-                <div class="border border-secondary border-2 order-window col">
+                <div class="border border-secondary border-2 order-window col-md-4 col-sm-12">
                     <h5 class="d-flex justify-content-center">ORDER SUMMARY</h5>
-                    <div class="d-flex text-end margin-order">
-                        <h5 class="col">Total: </h5>
-                        <h5 class="col" id="total-price">{{ total_price }}</h5>
+                    <div class="d-flex ">
+                        <span class="h5">Total: </span>
+                        <span class="h5" id="total-price">{{ total_price }} </span>
                         <p>{{ currency_symbol }}</p>
                     </div>
                     <div class="d-flex justify-content-center">
@@ -48,8 +48,22 @@
                             <button type="submit" class="btn btn-primary button-order">Checkout</button>
                         </form>
                     </div>
-                    <div class="d-flex justify-content-center margin-order ">
-                        <p>By confirming your order, you agree to <a href="#" class="terms-link">The Terms & Conditions</a></p>
+                    <div class="d-flex flex-column justify-content-center margin-order border">
+                        <span><i class="fa-solid fa-circle-info" style="color: #63E6BE;"></i> Наличие товара и его цена не гарантируются до тех пор, пока оплата не будет окончательно произведена</span>
+                        <span><i class="fa-solid fa-lock" style="color: #63E6BE;"></i> С вас не будет взиматься плата, пока вы не просмотрите заказ на следующей странице</span>
+                        <span><i class="fa-solid fa-shield" style="color: #63E6BE;"></i> SurvivalKit обязуется защищать вашу платежную информацию. Мы соблюдаем стандарты PCI DSS, используем надежное шифрование и регулярно проверяем систему шифрования в целях защиты вашей конфиденциальности. </span>
+                        <span>1. Способы оплаты</span>
+                        <div class="d-flex flex-row flex-wrap">
+                            {% for image in payment_method_images %}
+                                <img src="{{ image }}" class="card_order_window_img">
+                            {% endfor %}
+                        </div>
+                        <span>2. Сертификация безопасности</span>
+                        <div class="d-flex flex-row flex-wrap">
+                            {% for image in card_security_certification_images %}
+                                <img src="{{ image }}" class="card_order_window_img">
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -63,9 +77,8 @@
 {% endblock %}
 
 {% block js %}
-    <script src="https://js.stripe.com/v3/"></script>
     <script>
-        window.cartViewUrl = "{% url 'shop:cart_view' %}";
+        window.cartViewUrl = "{% url 'shop:cart' %}";
         window.csrftoken = '{{ csrf_token }}';
     </script>
     <script src="{% static 'shop/javascript/cart_list.js' %}">

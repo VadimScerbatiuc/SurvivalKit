@@ -12,7 +12,7 @@ body {
 .order-window {
     color : #797a82;
     width: 300px;
-    height: 250px;
+    height: 100%;
     background-color: #f7f7ed
 }
 
@@ -44,9 +44,13 @@ body {
 .button-order {
     background-color: #f7f7ed;
     color: gray;
-    width: 70%;
+    width: 100%;
     border: 2px solid gray;
     border-radius: 4px;
+
+
+.card_order_window_img{
+   height: 30px;
 }
 
 .button-order:hover {

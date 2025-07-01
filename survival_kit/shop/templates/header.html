@@ -11,7 +11,7 @@
                     <a class="nav-link" href="{% url 'shop:product_page' %}">Shop</a>
                 </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'shop:cart_view' %}">My Cart</a>
+                        <a class="nav-link" href="{% url 'shop:cart' %}">My Cart</a>
                     </li>
                 {% if request.user.is_product_manager %}
                     <li class="nav-item">
