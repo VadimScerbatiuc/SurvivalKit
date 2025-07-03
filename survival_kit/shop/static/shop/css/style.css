@@ -1,5 +1,7 @@
 :root {
-    --link-color: #cf8d13
+    --link-color: #cf8d13;
+    --green: #2e7d32;
+    --light-green: #e6f4e6;
 }
 
 body {
@@ -11,9 +13,12 @@ body {
 
 .order-window {
     color : #797a82;
-    width: 300px;
-    height: 100%;
-    background-color: #f7f7ed
+    min-width: 210px;
+}
+
+.card_order_window_img {
+    max-height: 30px;
+
 }
 
 .terms-link:link {
@@ -37,20 +42,12 @@ body {
     color: var(--link-color);
 }
 
-.margin-order {
-    margin: 0 20px 0 20px
-}
-
 .button-order {
     background-color: #f7f7ed;
     color: gray;
     width: 100%;
     border: 2px solid gray;
     border-radius: 4px;
-
-
-.card_order_window_img{
-   height: 30px;
 }
 
 .button-order:hover {
@@ -70,22 +67,49 @@ body {
 
 .cart-product-image{
     height: 200px;
-    max-width:200px;
-    min-width:200px;
+    max-width: 100px;
+    min-width: 100px;
 }
 
 /* card */
 .card-img-top {
-	height: 150px;
+ height: 200px;
 }
+
+.card-element {
+    max-width: 200px;
+    min-width: 200px;
+}
+
 
 .card-description {
-	overflow: hidden;
-	-webkit-box-orient: vertical;
-	-webkit-line-clamp: 6;
-	display: -webkit-box;
+ overflow: hidden;
+ -webkit-box-orient: vertical;
+ -webkit-line-clamp: 1;
+ display: -webkit-box;
 }
 
-/* card details */
+/* product filter */
+.filter-box {
+    min-width: 200px;
+    height: 100%;
+}
 
+/* grids learn */
+#grid1 {
+    background-color: blue;
+    display: grid;
+    grid-column-gap: 20px;
+    grid-row-gap: 10px;
+    grid-template-columns: 200px 200px auto
+}
 
+.grid-item {
+    background-color: red;
+    padding: 10px;
+}
+
+.e6 {
+    grid-column: 3;
+    grid-row: 2 / 4;
+}

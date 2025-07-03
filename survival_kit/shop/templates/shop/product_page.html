@@ -35,7 +35,7 @@
 {% endblock%}
 {% block js %}
 <script>
-    window.shopCartViewUrl = "{% url 'shop:cart_view' %}";
+    window.shopCartViewUrl = "{% url 'shop:cart' %}";
     window.csrftoken = '{{ csrf_token }}';
     window.urlProductList = "{% url 'shop:product:product_list' %}";
 </script>

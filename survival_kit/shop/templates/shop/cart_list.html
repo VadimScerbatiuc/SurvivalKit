@@ -24,7 +24,6 @@
                                     <p id="{{ item.product_id }}_price">{{ item.price_by_quantity }}</p>
                                     <p>{{ currency_symbol }}</p>
                                 </div>
-                                <!-- add/remove button -->
                                 <div class="d-inline-flex border rounded-5 align-item-center ">
                                     <button class="btn remove_from_cart_one" id="{{ item.product.id }}">{% if item.quantity == 1 %}<i class="fa-solid fa-trash"></i>{% else %}<i class="fa-solid fa-minus"></i>{% endif %}</button>
                                     <h3 id="{{ item.product.id }}_quantity" class="m-0">{{ item.quantity }}</h3>

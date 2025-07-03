@@ -173,6 +173,6 @@ pnpm-debug.log*
 *.sln
 *.sw?
 
-static/
+static_files
 /data
 data
