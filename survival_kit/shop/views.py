@@ -14,7 +14,7 @@ from shop.models import Product, Category, Brand, CartItem
 from shop.services.shopping_cart import CartService
 from shop.services.product_service import ProductService
 from shop.services.payment_service import PaymentService
-
+from shop.services.image_service import get_image_paths
 
 
 class ProductPageView(View):
@@ -67,12 +67,16 @@ class CartView(LoginRequiredMixin, View):
 
     def get(self, request):
         cart_service = CartService(request.user)
+        csc_images_directory_name = "card_security_certification_images"
+        payment_method_images_directory_name = "payment_method_images"
         return render(
             request,
             self.template_name,
             {
                 self.context_object_name: self.get_queryset(request),
-                'total_price': cart_service.get_total_price()
+                'total_price': cart_service.get_total_price(),
+                'card_security_certification_images': get_image_paths(csc_images_directory_name),
+                'payment_method_images': get_image_paths(payment_method_images_directory_name),
             }
         )
 
