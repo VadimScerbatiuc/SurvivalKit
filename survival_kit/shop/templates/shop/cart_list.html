@@ -11,7 +11,7 @@
                     {% for item in cart %}
                         <div class="cart-item-box d-flex" id="{{ item.product.id }}_block">
                             <div class="me-2 cart-product-image">
-                                <img class="card-img-top card-image" {% if item.product.main_image %} src="{{ item.product.main_image.image.url }} " {% endif %} alt="Card image cap">
+                                <img class="card-img-top card-image" {% if item.product.main_image %} src="{{ item.product.main_image.image.url }}" {% else %} src="{% static 'shop/images/no_image.jpg' %}" {% endif %} alt="Card image cap">
                             </div>
                             <div>
                                 <h2>{{ item.product.name }}</h2>
@@ -54,13 +54,13 @@
                         <span>1. Способы оплаты</span>
                         <div class="d-flex flex-row flex-wrap">
                             {% for image in payment_method_images %}
-                                <img src="{{ image }}" class="card_order_window_img">
+                                <img src="{% static image %}" class="card_order_window_img">
                             {% endfor %}
                         </div>
                         <span>2. Сертификация безопасности</span>
                         <div class="d-flex flex-row flex-wrap">
                             {% for image in card_security_certification_images %}
-                                <img src="{{ image }}" class="card_order_window_img">
+                                <img src="{% static image %}" class="card_order_window_img">
                             {% endfor %}
                         </div>
                     </div>

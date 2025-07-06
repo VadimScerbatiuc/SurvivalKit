@@ -128,6 +128,27 @@ STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_files')
 STATICFILES_DIRS = []
 
+STATIC_CSC_IMAGES_LIST = [
+'shop/images/card_security_certification_images/card_security_certification1.jpg',
+'shop/images/card_security_certification_images/card_security_certification2.jpg',
+'shop/images/card_security_certification_images/card_security_certification3.jpg',
+'shop/images/card_security_certification_images/card_security_certification4.jpg',
+'shop/images/card_security_certification_images/card_security_certification5.jpg',
+'shop/images/card_security_certification_images/card_security_certification6.jpg',
+'shop/images/card_security_certification_images/card_security_certification7.jpg',
+]
+STATIC_PAYMENT_METHOD_IMAGES_LIST = [
+    'shop/images/payment_method_images/payment_method_image_1.webp',
+    'shop/images/payment_method_images/payment_method_image_2.webp',
+    'shop/images/payment_method_images/payment_method_image_3.webp',
+    'shop/images/payment_method_images/payment_method_image_4.webp',
+    'shop/images/payment_method_images/payment_method_image_5.webp',
+    'shop/images/payment_method_images/payment_method_image_6.webp',
+    'shop/images/payment_method_images/payment_method_image_7.webp',
+    'shop/images/payment_method_images/payment_method_image_8.webp',
+    'shop/images/payment_method_images/payment_method_image_9.webp',
+]
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
