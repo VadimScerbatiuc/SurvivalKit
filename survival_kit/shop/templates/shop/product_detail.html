@@ -24,7 +24,7 @@
 
 {% block js %}
 <script>
-    window.cartProductDetailUrl = "{% url 'shop:cart_view' %}";
+    window.cartProductDetailUrl = "{% url 'shop:cart' %}";
     window.csrftoken = '{{ csrf_token }}';
 </script>
 <script src="{% static 'shop/javascript/product_detail.js' %}"></script>

@@ -4,7 +4,6 @@ const csrftoken = '{{ csrf_token }}';
 addToCartButton.addEventListener("click", async function(){
     const productId = this.id.split('add-to-cart-button-')[1];
     const inputValue = document.getElementById('product-quantity-input-value').value;
-    console.log(productId, inputValue);
     fetch("{% url 'shop:cart_view' %}", {
         method: 'POST',
         headers: {

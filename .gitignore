@@ -146,13 +146,7 @@ cython_debug/
 node_modules
 /dist
 
-/survival_kit/media/images
-media/*
-!/media/card_security_certification_images/
-!/media/card_security_certification_images/**
-!/media/payment_method_images/
-!/media/payment_method_images/**
-
+media
 
 # local env files
 .env.local

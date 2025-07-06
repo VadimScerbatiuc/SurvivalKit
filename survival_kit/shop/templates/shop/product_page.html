@@ -38,6 +38,7 @@
     window.shopCartViewUrl = "{% url 'shop:cart' %}";
     window.csrftoken = '{{ csrf_token }}';
     window.urlProductList = "{% url 'shop:product:product_list' %}";
+    window.favoriteProductPageUrl = "{% url 'shop:product:favorite_products' %}";
 </script>
 <script src="{% static 'shop/javascript/product_page.js' %}"></script>
 {% endblock%}

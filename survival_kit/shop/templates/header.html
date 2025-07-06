@@ -20,6 +20,9 @@
                         <a class="nav-link" href="{% url 'users:management' %}">Manage users</a>
                     </li>
                 {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'shop:product:favorite_products' %}">Favorites</a>
+                </li>
             </ul>
                 <div class="d-flex align-items-center">
                     {% if request.user.is_authenticated %}

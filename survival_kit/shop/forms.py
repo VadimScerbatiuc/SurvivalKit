@@ -20,7 +20,6 @@ class ProductCreateForm(forms.ModelForm):
         product = super().save(commit=commit)
 
         image_file = self.cleaned_data.get('image')
-        print(image_file)
         if image_file:
             ProductImage.objects.create(product=product, image=image_file)
 
