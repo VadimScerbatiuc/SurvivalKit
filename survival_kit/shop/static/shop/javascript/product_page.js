@@ -1,6 +1,7 @@
 const checkboxes_by_class = Array.from(document.getElementsByClassName('form-check-input'));
 const currentUrl = new URL(location);
 const buttons_add_to_cart = Array.from(document.getElementsByClassName('add_to_cart'));
+const buttons_add_to_favorite = Array.from(document.getElementsByClassName('wishlist_btn'));
 
 checkboxes_by_class.forEach(async function(elem){
     elem.addEventListener("change", async function(){
@@ -43,7 +44,7 @@ function updateURLAndFetch(){
 buttons_add_to_cart.forEach(async function(elem){
     elem.addEventListener("click", async function(){
         const product_id = this.id;
-
+        console.log(shopCartViewUrl)
         fetch(shopCartViewUrl, {
             method: 'POST',
             headers: {
@@ -61,6 +62,40 @@ buttons_add_to_cart.forEach(async function(elem){
             else{
                 toastr.error('Item was not added to the cart');
             }
+        })
+    })
+})
+
+buttons_add_to_favorite.forEach(async function(elem){
+    elem.addEventListener("click", async function(){
+        const product_id = this.id;
+        let idItemFavoriteCard = product_id + '_product';
+
+        fetch(favoriteProductPageUrl, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRFToken': csrftoken,
+            },
+            body: JSON.stringify({'product_id': product_id})
+        })
+        .then(async response => {
+            let data = await response.json();
+            let status = await data.status;
+            let element = document.getElementById(idItemFavoriteCard);
+            console.log(element)
+            if (status == 'added'){
+                elem.innerHTML = '<i class="fa-solid fa-star" style="color: #ff9500;"></i>';
+                toastr.success('Successfully added to favorites');
+            }
+            else if (status == 'removed'){
+                elem.innerHTML = '<i class="fa-solid fa-star""></i>';
+                toastr.success('Successfully removed to favorites');
+            }
+            else {
+                toastr.error('error');
+            }
+
         })
     })
 })

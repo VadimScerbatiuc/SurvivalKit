@@ -3,6 +3,7 @@ import json
 import stripe
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import OuterRef
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views import View
@@ -10,11 +11,12 @@ from django.http import JsonResponse
 from django.views.generic import DetailView, CreateView, TemplateView
 
 from shop.forms import ProductCreateForm
-from shop.models import Product, Category, Brand, CartItem
+from shop.models import Product, Category, Brand, CartItem, FavoriteProduct
 from shop.services.shopping_cart import CartService
 from shop.services.product_service import ProductService
 from shop.services.payment_service import PaymentService
 from shop.services.image_service import get_image_paths
+
 
 
 class ProductPageView(View):
@@ -42,16 +44,17 @@ class ProductPageView(View):
 
 
 class ProductListView(View):
-    model = Product
     template_name = 'shop/includes/product_list.html'
     context_object_name = 'products'
-    filtered_products = ProductService()
-    def get(self, request):
+    filtered_products = ProductService
 
+    def get(self, request):
         return render(
             request,
             self.template_name,
-            {self.context_object_name: self.filtered_products.get_filtered_products(request)}
+            {
+                self.context_object_name: self.filtered_products.get_filtered_products(request),
+             }
         )
 
 
@@ -140,3 +143,36 @@ class CreateCheckoutSessionView(LoginRequiredMixin, View):
 
 class SuccessView(LoginRequiredMixin, TemplateView):
     template_name = "shop/success.html"
+
+
+class FavoriteProductsView(LoginRequiredMixin, View):
+    model = FavoriteProduct
+    template_name = 'shop/favorite_product.html'
+    context_object_name = "favorite_products"
+
+    def get_queryset(self, request):
+        queryset = FavoriteProduct.objects.filter(user=request.user)
+
+        return queryset
+
+    def get(self, request):
+
+        return render(
+            request,
+            self.template_name,
+            {
+                self.context_object_name: self.get_queryset(request),
+            }
+        )
+
+    def post(self, request):
+        data = json.loads(request.body)
+        product_id = data.get('product_id')
+        product = Product.objects.get(id=product_id)
+        wishlist_item, created = FavoriteProduct.objects.get_or_create(user=request.user, product=product)
+
+        if not created:
+            wishlist_item.delete()
+            return JsonResponse({'status':'removed'})
+        return JsonResponse({'status':'added'})
+

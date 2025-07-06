@@ -107,3 +107,8 @@ class CartItem(models.Model):
     @property
     def price_by_quantity(self):
         return self.product.price * self.quantity
+
+
+class FavoriteProduct(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    user = models.ForeignKey(UserAccount, on_delete=models.PROTECT)

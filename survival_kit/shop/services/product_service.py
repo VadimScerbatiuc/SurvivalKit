@@ -1,8 +1,12 @@
-from shop.models import Product
+from django.db.models import OuterRef, Exists
+from shop.models import Product, FavoriteProduct
+
 
 class ProductService:
-    def get_filtered_products(self, request):
-        queryset = Product.objects.all()
+    @staticmethod
+    def get_filtered_products(request):
+        favorite_product = FavoriteProduct.objects.filter(user=request.user, product=OuterRef('id'))
+        queryset = Product.objects.annotate(is_favorite=Exists(favorite_product))
         if request.GET.getlist('category'):
             queryset = queryset.filter(category__slug__in=request.GET.getlist('category'))
         if request.GET.get('brand'):
