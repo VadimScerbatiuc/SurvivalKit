@@ -34,7 +34,6 @@ buttons_add_to_favorite.forEach(async function(elem){
 buttons_add_to_cart.forEach(async function(elem){
     elem.addEventListener("click", async function(){
         const product_id = this.id;
-        console.log(shopCartViewUrl)
         fetch(shopCartViewUrl, {
             method: 'POST',
             headers: {

@@ -44,7 +44,6 @@ function updateURLAndFetch(){
 buttons_add_to_cart.forEach(async function(elem){
     elem.addEventListener("click", async function(){
         const product_id = this.id;
-        console.log(shopCartViewUrl)
         fetch(shopCartViewUrl, {
             method: 'POST',
             headers: {
@@ -83,7 +82,6 @@ buttons_add_to_favorite.forEach(async function(elem){
             let data = await response.json();
             let status = await data.status;
             let element = document.getElementById(idItemFavoriteCard);
-            console.log(element)
             if (status == 'added'){
                 elem.innerHTML = '<i class="fa-solid fa-star" style="color: #ff9500;"></i>';
                 toastr.success('Successfully added to favorites');
